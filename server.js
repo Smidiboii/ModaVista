@@ -38,6 +38,10 @@ app.get("/collection", function(req, res) {
     res.render("pages/collection");
 })
 
+app.get("/checkout", function(req, res) {
+    res.render("pages/checkout");
+})
+
 // expose assets
 
 app.listen(3000, function() {
