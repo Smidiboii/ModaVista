@@ -16,17 +16,19 @@ Connect to server
 */
 const server = app.listen(4001, function () {
     console.log("serveur fonctionne sur 4001... ! ");
+    console.log(__dirname);
 });
 /*
 Configuration de EJS
 */
-app.set("views", path.join(__dirname, "pages"));
+app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 /*
 Importation de Bootstrap
 */
 app.use("/js", express.static(__dirname + "/node_modules/bootstrap/dist/js"));
 app.use("/css", express.static(__dirname + "/node_modules/bootstrap/dist/css"));
+app.use("/assets", express.static(__dirname + "/views/assets"));
 /*
 Connection au server MySQL
 */
@@ -43,80 +45,8 @@ con.connect(function (err) {
 /*
 Description des routes
 */
-app.get("/", function (req, res) {
-    con.query("SELECT * FROM e_events ORDER BY e_start_date DESC", function (err,
-        result) {
-        if (err) throw err;
-        res.render("pageArticles", {
-            siteTitle: "Application simple",
-            pageTitle: "Liste d'événements",
-            items: result
-        });
-    });
-});
-app.get("/event/add", function (req, res) {
-    con.query("SELECT * FROM e_events ORDER BY e_start_date DESC", function (err,
-        result) {
-        if (err) throw err;
-        res.render("pages/add-event", {
-            siteTitle: "Application simple",
-            pageTitle: "Ajouter un nouvel événement",
-            items: result
-        });
-    });
-});
-app.post("/event/add", function (req, res) {
-    const requete = "INSERT INTO e_events (e_name, e_start_date, e_start_end, e_desc, e_location) VALUES (?, ?, ?, ?, ?)";
-    const parametres = [
-        req.body.e_name,
-        dateFormat(req.body.e_start_date, "yyyy-mm-dd"),
-        dateFormat(req.body.e_start_end, "yyyy-mm-dd"),
-        req.body.e_desc,
-        req.body.e_location
-    ];
-    con.query(requete, parametres, function (err, result) {
-        if (err) throw err;
-        res.redirect("/");
-    });
-});
-/*
-Permettre l'utilisation de body lors des POST request
-*/
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.get("/event/edit/:id", function (req, res) {
-    const requete = "SELECT * FROM e_events WHERE e_id = ?";
-    const parametres = [req.params.id];
-    con.query(requete, parametres, function (err, result) {
-        if (err) throw err;
-        result[0].e_start_date = dateFormat(result[0].e_start_date, "yyyy-mm-dd");
-        result[0].e_start_end = dateFormat(result[0].e_end_date, "yyyy-mm-dd");
-        res.render("pages/edit-event.ejs", {
-            siteTitle: "Application simple",
-            pageTitle: "Editer événement : " + result[0].e_name,
-            items: result,
-        });
-    });
-});
-app.post("/event/edit/:id", function (req, res) {
-    const requete = "UPDATE e_events SET e_name = ?, e_start_date = ?, e_start_end = ?, e_desc = ?, e_location = ? WHERE e_id = ?";
-    const parametres = [
-        req.body.e_name,
-        req.body.e_start_date,
-        req.body.e_end_date,
-        req.body.e_desc,
-        req.body.e_location,
-        req.body.e_id
-    ];
-    con.query(requete, parametres, function (err, result) {
-        if (err) throw err;
-        res.redirect("/");
-    });
-});
-app.get("/event/delete/:id", function (req, res) {
-    const requete = "DELETE FROM e_events WHERE e_id = ?";
-    con.query(requete, [req.params.id], function (err, result) {
-        if (err) throw err;
-        res.redirect("/");
+app.get("/PageArticles", function (req, res) {
+    res.render("pages/PageArticles.ejs", {
+        fondDEcran: "assets/img/FondDEcran.png",
     });
 });
