@@ -30,6 +30,10 @@ app.get("/", function(req, res) {;
     res.render("pages/index");
 })
 
+app.get("/compte", function(req, res) {
+    res.render("pages/compte");
+})
+
 // expose assets
 
 app.listen(3000, function() {
