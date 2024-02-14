@@ -24,7 +24,7 @@ app.use(express.urlencoded({ extended: true }));
 Description des routes
 */
 
-app.use('/assets', express.static(path.join(__dirname, 'assets')));
+app.use('/assets', express.static(path.join(__dirname, 'views', 'assets')));
 
 app.get("/", function(req, res) {;
     res.render("pages/index");
