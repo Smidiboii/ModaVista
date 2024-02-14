@@ -50,3 +50,9 @@ app.get("/PageArticles", function (req, res) {
         fondDEcran: "assets/img/FondDEcran.png",
     });
 });
+
+app.get("/pageInscription", function(req,res){
+    res.render("pages/pageInscription.ejs",{
+
+    })
+});
