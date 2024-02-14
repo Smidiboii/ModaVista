@@ -34,6 +34,10 @@ app.get("/compte", function(req, res) {
     res.render("pages/compte");
 })
 
+app.get("/collection", function(req, res) {
+    res.render("pages/collection");
+})
+
 // expose assets
 
 app.listen(3000, function() {
