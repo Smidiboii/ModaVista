@@ -41,5 +41,19 @@
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 </body>
+<script>
+    window.onscroll = function () { DessendreMenu() };
+
+    var header = document.getElementById("menu");
+    var collant = header.offsetTop;
+
+    function DessendreMenu() {
+        if (window.pageYOffset > collant) {
+            header.classList.add("collant");
+        } else {
+            header.classList.remove("collant");
+        }
+    }
+</script>
 
 </html>

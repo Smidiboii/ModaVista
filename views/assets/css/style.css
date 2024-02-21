@@ -88,7 +88,20 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background-color: rgb(255, 255, 255);
+    background-size: cover;
 }
+
+.card {
+    position: static;
+}
+
+.collant {
+    position: fixed;
+    top: 0;
+    width: 68.2%;
+}
+
 
 footer {
     background-color: black;
@@ -101,4 +114,9 @@ footer {
 
 h2 {
     margin-top: 10px;
+}
+
+.border-bottom {
+    background-color: rgb(255, 255, 255);
+    background-size: cover;
 }

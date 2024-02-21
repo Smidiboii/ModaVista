@@ -8,6 +8,7 @@ import { fileURLToPath } from "url";
 import mysql from "mysql";
 import { body, validationResult } from "express-validator";
 import dateFormat from "dateformat";
+
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -16,7 +17,6 @@ Connect to server
 */
 const server = app.listen(4001, function () {
     console.log("serveur fonctionne sur 4001... ! ");
-    console.log(__dirname);
 });
 /*
 Configuration de EJS
@@ -46,7 +46,25 @@ con.connect(function (err) {
 Description des routes
 */
 app.get("/PageArticles", function (req, res) {
-    res.render("pages/PageArticles.ejs", {
-        fondDEcran: "assets/img/FondDEcran.png",
-    });
+    let id = '0';
+
+
+    con.query('SELECT * FROM articulos',
+        nombre, (err, results) => {
+            if (err) {
+                console.error('Error al consultar la bd.', err);
+
+                return res.status(500).send('Error interno del server');
+            }
+
+            res.render("pages/PageArticles.ejs", {
+                fondDEcran: "assets/img/FondDEcran.png",
+                articulos: results
+            });
+
+
+        });
+
+
 });
+
