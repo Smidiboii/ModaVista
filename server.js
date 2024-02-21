@@ -56,3 +56,52 @@ app.get("/pageInscription", function(req,res){
 
     })
 });
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+
+app.post("/pageInscription", function(req, res){
+    const requete = "INSERT INTO Client (Prenom, Nom, Email, Mdp, Tel.num, Adrese) VALUE(?, ?, ?, ?, ?, ?)";
+    const parametres = [
+        req.body.Prenom,
+        req.body.Nom,
+        req.body.Email,
+        req.body.Mdp,
+        req.body.NumreosDeTelephone,
+        req.body.Adresse,
+    ];
+
+    con.query(requete, parametres, function (err, result) {
+        if (err) throw err;
+        res.redirect("/");
+    });
+});
+
+//chatgpt code
+document.getElementById("inscriptionForm").addEventListener("submit", function(event) {
+    event.preventDefault(); // Empêche le formulaire de se soumettre normalement
+
+    // Créez un objet FormData pour envoyer les données du formulaire
+    const formData = new FormData(this);
+
+    // Envoyez une requête POST au serveur
+    fetch("/pageInscription", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Erreur lors de la requête");
+        }
+        return response.json();
+    })
+    .then(data => {
+        // Traitez la réponse du serveur ici
+        console.log(data);
+    })
+    .catch(error => {
+        // Gérez les erreurs ici
+        console.error(error);
+    });
+});
