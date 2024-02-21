@@ -1,6 +1,3 @@
-/*
-Importation des modules requis
-*/
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -11,19 +8,19 @@ const __dirname = path.dirname(__filename);
 import mysql from "mysql";
 
 /*
-Configuration de EJS
+    Configuration de EJS
 */
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs")
 
 /*
-Connection au server MySQL
+    Connection au server MySQL
 */
 const con = mysql.createConnection({
     host: "localhost",
     user: "scott",
     password: "oracle",
-    database: "mybd"
+    database: "scott"
 });
 con.connect(function(err) {
     if (err) throw err;
@@ -35,7 +32,7 @@ app.use(express.urlencoded({ extended: true }));
 
 
 /*
-Description des routes
+    Description des routes
 */
 
 app.use('/assets', express.static(path.join(__dirname, 'views', 'assets')));
@@ -55,6 +52,21 @@ app.get("/collection", function(req, res) {
 app.get("/checkout", function(req, res) {
     res.render("pages/checkout");
 })
+
+// login endpoint api
+
+app.post("/login", function(req, res) {
+    const { email, password } = req.body;
+
+    con.query("SELECT * FROM CLIENT WHERE email = ? AND mdp = ?", [email, password], function(err, result) {
+        if (err) throw err;
+        if (result.length > 0) {
+            res.json({ message: "success" });
+        } else {
+            res.json({ message: "failed" });
+        }
+    });
+});
 
 // expose assets
 
