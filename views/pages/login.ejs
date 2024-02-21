@@ -23,10 +23,40 @@
                                 <input type="password" class="form-control" id="inputPassword">
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary mb-3">Se connecter</button>
+                        <button type="button" onclick="login()" class="btn btn-primary mb-3">Se connecter</button>
                     </div>
         </div>
     </main>
+
+    <script>
+        function login() {
+            const email = document.getElementById('inputEmail').value;
+            const password = document.getElementById('inputPassword').value;
+
+            fetch("/login", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email,
+                        password
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message === 'success') {
+                        alert('Login successful!');
+                        // Redirect or perform any other action upon successful login
+                    } else {
+                        alert('Login failed. Please check your credentials.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+    </script>
 </body>
 
 </html>
