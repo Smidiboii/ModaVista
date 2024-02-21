@@ -57,6 +57,10 @@ app.get("/login", function(req, res) {
     res.render("pages/login");
 })
 
+app.get("/signup", function(req, res) {
+    res.render("pages/signup");
+});
+
 // login endpoint api
 
 app.post("/login", function(req, res) {
