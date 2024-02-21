@@ -53,6 +53,10 @@ app.get("/checkout", function(req, res) {
     res.render("pages/checkout");
 })
 
+app.get("/login", function(req, res) {
+    res.render("pages/login");
+})
+
 // login endpoint api
 
 app.post("/login", function(req, res) {
