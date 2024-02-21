@@ -8,6 +8,7 @@ const app = express();
 const __filename = fileURLToPath(
     import.meta.url);
 const __dirname = path.dirname(__filename);
+import mysql from "mysql";
 
 /*
 Configuration de EJS
@@ -15,6 +16,19 @@ Configuration de EJS
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs")
 
+/*
+Connection au server MySQL
+*/
+const con = mysql.createConnection({
+    host: "localhost",
+    user: "scott",
+    password: "oracle",
+    database: "mybd"
+});
+con.connect(function(err) {
+    if (err) throw err;
+    console.log("connected!");
+});
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
