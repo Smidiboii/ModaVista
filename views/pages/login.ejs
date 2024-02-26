@@ -7,7 +7,7 @@
 
 <body>
     <main>
-        <div class="container py-4">
+        <form class="container py-4">
             <%- include ("../partials/header.ejs") %>
                 <h1 class="text-center mb-4">Se connecter</h2>
                     <div class="card p-3">
@@ -23,12 +23,17 @@
                                 <input type="password" class="form-control" id="inputPassword">
                             </div>
                         </div>
-                        <button type="button" onclick="login()" class="btn btn-primary mb-3">Se connecter</button>
+                        <button type="submit" class="btn btn-primary mb-3">Se connecter</button>
                     </div>
-        </div>
+        </form>
     </main>
 
     <script>
+        // disable the default form submission
+        document.querySelector('form').addEventListener('submit', function(event) {
+            login()
+        });
+
         function login() {
             const email = document.getElementById('inputEmail').value;
             const password = document.getElementById('inputPassword').value;
@@ -47,7 +52,6 @@
                 .then(data => {
                     if (data.message === 'success') {
                         alert('Login successful!');
-                        // Redirect or perform any other action upon successful login
                     } else {
                         alert('Login failed. Please check your credentials.');
                     }
