@@ -92,7 +92,8 @@ app.post("/signup", function(req, res) {
             con.query("INSERT INTO Clients (Prenom, Nom, Email, Mdp, TelNum, Adresse) VALUES (?, ?, ?, ?, ?, ?)", [prenom, nom, email, mdp, tel, adresse], function(err, result) {
                 if (err) throw err;
 
-                res.json({ message: "success" });
+                //res.json({ message: "success" });
+                //alert("success");
             });
         }
     });

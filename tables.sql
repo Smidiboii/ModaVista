@@ -24,6 +24,9 @@ CREATE TABLE Produit (
     CollectionID int not null,
     FOREIGN KEY (CollectionID) REFERENCES Collection(CollectionID)
 );
+ALTER TABLE Produit
+ADD COLUMN Description VARCHAR(200) NOT NULL;
+
 create table Panier( 
     PanierID int AUTO_INCREMENT PRIMARY KEY,
     ClientID int not null,
@@ -53,6 +56,12 @@ create table CodePromo (
     PourcentageRabais int not null,
     Expiration date not null
 );
+
+--les insert pour table collection
+
+
+
+
 /*CREATE TABLE `PRODUIT` (
     `PRODUCTID` INT NOT NULL,
     `NAME` VARCHAR(200) NOT NULL,
