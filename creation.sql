@@ -1,0 +1,2 @@
+INSERT INTO Collection (NomCollection) VALUES ('chaussure');
+INSERT INTO Produit (Nom, Description, TypeProduit, Marque, Taille, Prix, CollectionID) VALUES ('Chaussure Blanche', 'Desc', 'chaussure', 'Deluxe', 'medium', 1200, 1);

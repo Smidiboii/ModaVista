@@ -17,6 +17,7 @@ CREATE TABLE Collection (
 CREATE TABLE Produit (
     ProduitID int AUTO_INCREMENT PRIMARY KEY,
     Nom varchar(200) not null,
+    Description varchar(500) not null,
     TypeProduit varchar(200) not null,
     Marque varchar(200) not null,
     Taille varchar(10) not null,
