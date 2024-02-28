@@ -61,18 +61,13 @@ app.get("/signup", function(req, res) {
     res.render("pages/signup");
 });
 
-app.get("/produit", function(req, res) {
-    res.render("pages/produit");
-})
-
-// produit /product/id
-// app.get("/product/:id", function(req, res) {
-//     const id = req.params.id;
-//     con.query("SELECT * FROM PRODUIT WHERE id = ?", [id], function(err, result) {
-//         if (err) throw err;
-//         res.render("pages/product", { produit: result[0] });
-//     });
-// });
+app.get("/produit/:id", function(req, res) {
+    const id = req.params.id;
+    con.query("SELECT * FROM Produit WHERE ProduitID = ?", [id], function(err, result) {
+        if (err) throw err;
+        res.render("pages/produit", { produit: result[0] });
+    });
+});
 
 // login endpoint api
 
