@@ -61,12 +61,21 @@ app.get("/signup", function(req, res) {
     res.render("pages/signup");
 });
 
+// produit /product/id
+// app.get("/product/:id", function(req, res) {
+//     const id = req.params.id;
+//     con.query("SELECT * FROM PRODUIT WHERE id = ?", [id], function(err, result) {
+//         if (err) throw err;
+//         res.render("pages/product", { produit: result[0] });
+//     });
+// });
+
 // login endpoint api
 
 app.post("/login", function(req, res) {
     const { email, password } = req.body;
 
-    con.query("SELECT * FROM CLIENT WHERE email = ? AND mdp = ?", [email, password], function(err, result) {
+    con.query("SELECT * FROM Clients WHERE email = ? AND mdp = ?", [email, password], function(err, result) {
         if (err) throw err;
         if (result.length > 0) {
             res.json({ message: "success" });
@@ -82,14 +91,14 @@ app.post("/signup", function(req, res) {
     const { prenom, nom, email, mdp } = req.body;
 
     // Check if the email already exists in the database
-    con.query("SELECT * FROM CLIENT WHERE email = ?", [email], function(err, result) {
+    con.query("SELECT * FROM Clients WHERE email = ?", [email], function(err, result) {
         if (err) throw err;
 
         if (result.length > 0) {
             res.json({ message: "Email already exists. Please choose another email." });
         } else {
             // If email is unique, insert the new user into the database
-            con.query("INSERT INTO CLIENT (PRENOM, NOM, EMAIL, MDP) VALUES (?, ?, ?, ?)", [prenom, nom, email, mdp], function(err, result) {
+            con.query("INSERT INTO Clients (PRENOM, NOM, EMAIL, MDP) VALUES (?, ?, ?, ?)", [prenom, nom, email, mdp], function(err, result) {
                 if (err) throw err;
 
                 res.json({ message: "success" });
