@@ -1,77 +1,53 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr" data-bs-theme="auto">
 
 <head>
     <%- include ("../partials/head.ejs") %>
-    <style>
-        .card, .header {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 1s ease-in-out, transform 1s ease-in-out;
-        }
-
-        body.loaded .card, body.loaded .header {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    </style>
 </head>
+
 <body>
     <main>
-        <form class="container py-4" action="/login" method="post">
-            <div class="header">
-                <% include ("../partials/header.ejs") %>
-            </div>
-            <div class="card p-3">
-                <h1 class="text-center mb-4">Se connecter</h1>
-                <div class="mb-3 row">
-                    <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control" id="inputEmail" name="email" required>
+        <div class="container py-4">
+            <%- include ("../partials/header.ejs") %>
+                <h1 class="text-center mb-4">Se connecter</h2>
+                    <div class="card p-3">
+                        <div class="mb-3 row">
+                            <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="inputEmail">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
+                            <div class="col-sm-10">
+                                <input type="password" class="form-control" id="inputPassword">
+                            </div>
+                        </div>
+                        <button type="button" onclick="login()" class="btn btn-primary mb-3">Se connecter</button>
                     </div>
-                </div>
-                <div class="mb-3 row">
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
-                    <div class="col-sm-10">
-                        <input type="password" class="form-control" id="inputPassword" name="password" required>
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-primary mb-3">Se connecter</button>
-            </div>
-        </form>
+        </div>
     </main>
 
-    <script defer>
-        document.addEventListener('DOMContentLoaded', function () {
-            document.body.classList.add('loaded');
-        });
-    
-        // disable the default form submission
-        document.querySelector('form').addEventListener('submit', function (event) {
-            event.preventDefault();
-            login();
-        });
-    
+    <script>
         function login() {
             const email = document.getElementById('inputEmail').value;
             const password = document.getElementById('inputPassword').value;
-    
+
             fetch("/login", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    email,
-                    password
-                }),
-            })
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email,
+                        password
+                    }),
+                })
                 .then(response => response.json())
                 .then(data => {
                     if (data.message === 'success') {
                         alert('Login successful!');
-                        // If login is successful, submit the form
-                        document.querySelector('form').submit();
+                        // Redirect or perform any other action upon successful login
                     } else {
                         alert('Login failed. Please check your credentials.');
                     }
@@ -81,7 +57,6 @@
                 });
         }
     </script>
-    
 </body>
 
 </html>
