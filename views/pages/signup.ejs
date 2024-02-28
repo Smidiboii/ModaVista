@@ -7,6 +7,38 @@
 
 <body>
     <main>
+
+        <%- include ("../partials/header.ejs") %>
+        <form action="/signup" method="POST">
+            <label for="prenom">Prénom :</label>
+            <input type="text" id="prenom" name="prenom" required><br>
+        
+            <label for="nom">Nom :</label>
+            <input type="text" id="nom" name="nom" required><br>
+        
+            <label for="email">Email :</label>
+            <input type="email" id="email" name="email" required><br>
+        
+            <label for="mdp">Mot de passe :</label>
+            <input type="password" id="mdp" name="mdp" required><br>
+        
+            <label for="tel">Téléphone :</label>
+            <input type="tel" id="tel" name="tel" required><br>
+        
+            <label for="adresse">Adresse :</label>
+            <input type="text" id="adresse" name="adresse" required><br>
+        
+            <input type="submit" value="Ajouter">
+        </form>
+        <%- include ("../partials/footer.ejs") %>
+
+        
+    </main>
+</body>
+
+</html>
+
+<!-- 
         <div class="container py-4">
             <%- include ("../partials/header.ejs") %>
                 <h1 class="text-center mb-4">Se créer de compte</h2>
@@ -41,8 +73,4 @@
                         </div>
                         <button type="submit" class="btn btn-primary mb-3">Créer de compte</button>
                     </div>
-        </div>
-    </main>
-</body>
-
-</html>
+        </div>-->
