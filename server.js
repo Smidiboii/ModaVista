@@ -46,25 +46,31 @@ con.connect(function (err) {
 Description des routes
 */
 app.get("/PageArticles", function (req, res) {
-    let id = '0';
 
+    con.query('SELECT COLLECTIONID, NOMCOLLECTION FROM COLLECTION WHERE COLLECTIONID = ?', 1, (err, results) => {
+        if (err) {
+            console.error('Erreur avec la consultation de la BD.', err);
+            return res.status(500).send('Collection non trouvée.');
+        }
+        let CollectionID = results[0].COLLECTIONID;
+        let nomCollection = results[0].NOMCOLLECTION;
+        console.log(nomCollection);
 
-    con.query('SELECT * FROM articulos',
-        nombre, (err, results) => {
+        con.query('SELECT NAME, PRICE FROM PRODUIT where COLLECTIONID = ?', CollectionID, (err, produits) => {
             if (err) {
-                console.error('Error al consultar la bd.', err);
-
-                return res.status(500).send('Error interno del server');
+                console.error('Erreur avec la consultation de la BD.', err);
+                return res.status(500).send('Collection non trouvée.');
             }
-
+            for (let index = 0; index < produits.length; index++) {
+                console.log(produits[index]);
+            }
             res.render("pages/PageArticles.ejs", {
                 fondDEcran: "assets/img/FondDEcran.png",
-                articulos: results
+                produits: produits,
+                collection: nomCollection,
+                imgNonTrouvee: "assets/img/IMG_NONTROUVEE.jpg"
             });
-
-
         });
-
-
+    });
 });
 
