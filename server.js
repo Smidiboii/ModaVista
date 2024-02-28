@@ -35,17 +35,11 @@ Connection au server MySQL
 */
 const con = mysql.createConnection({
     host: "localhost",
-<<<<<<< Updated upstream
-    user: "root",
-    password: "securepassword",
-    database: "mydatabase"
-=======
     user: "scott",
     password: "oracle",
     database: "scott",
     port: 3306
 
->>>>>>> Stashed changes
 });
 con.connect(function (err) {
     if (err) throw err;
@@ -84,13 +78,6 @@ app.get("/PageArticles", function (req, res) {
 });
 
 
-<<<<<<< Updated upstream
-app.get("/pageInscription", function(req,res){
-    res.render("pages/pageInscription.ejs",{
-
-    })
-});
-=======
 app.listen(3000, function() {
     console.log("serveur fonctionne sur http://localhost:3000 ... ! ");
 
@@ -103,4 +90,3 @@ app.get('/login', (req, res) => {
         pageTitle: 'Se connecter',
     });
 });
->>>>>>> Stashed changes
