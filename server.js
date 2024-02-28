@@ -61,6 +61,10 @@ app.get("/signup", function(req, res) {
     res.render("pages/signup");
 });
 
+app.get("/produit", function(req, res) {
+    res.render("pages/produit");
+})
+
 // produit /product/id
 // app.get("/product/:id", function(req, res) {
 //     const id = req.params.id;
