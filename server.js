@@ -1,76 +1,165 @@
-/*
-Importation des modules requis
-*/
 import express from "express";
-import session from "express-session";
 import path from "path";
 import { fileURLToPath } from "url";
-import mysql from "mysql";
-import { body, validationResult } from "express-validator";
-import dateFormat from "dateformat";
-
 const app = express();
-const __filename = fileURLToPath(import.meta.url);
+const __filename = fileURLToPath(
+    import.meta.url);
 const __dirname = path.dirname(__filename);
+import mysql from "mysql";
+
 /*
-Connect to server
-*/
-const server = app.listen(4001, function () {
-    console.log("serveur fonctionne sur 4001... ! ");
-});
-/*
-Configuration de EJS
+    Configuration de EJS
 */
 app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "ejs");
+app.set("view engine", "ejs")
+
 /*
-Importation de Bootstrap
-*/
-app.use("/js", express.static(__dirname + "/node_modules/bootstrap/dist/js"));
-app.use("/css", express.static(__dirname + "/node_modules/bootstrap/dist/css"));
-app.use("/assets", express.static(__dirname + "/views/assets"));
-/*
-Connection au server MySQL
+    Connection au server MySQL
 */
 const con = mysql.createConnection({
     host: "localhost",
     user: "scott",
     password: "oracle",
-    database: "mybd"
+    database: "scott"
 });
 con.connect(function (err) {
     if (err) throw err;
     console.log("connected!");
 });
-/*
-Description des routes
-*/
-app.get("/PageArticles", function (req, res) {
 
-    con.query('SELECT COLLECTIONID, NOMCOLLECTION FROM COLLECTION WHERE COLLECTIONID = ?', 1, (err, results) => {
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+
+/*
+    Description des routes
+*/
+
+app.use('/assets', express.static(path.join(__dirname, 'views', 'assets')));
+
+app.get("/", function (req, res) {
+    ;
+    res.render("pages/index");
+})
+
+app.get("/compte", function (req, res) {
+    res.render("pages/compte");
+})
+
+// Recupera la collection sin filtros.
+app.get("/collection", function (req, res) {
+
+    con.query('SELECT NomCollection, CollectionID FROM Collection', (err, results) => {
         if (err) {
             console.error('Erreur avec la consultation de la BD.', err);
-            return res.status(500).send('Collection non trouvée.');
+            return res.status(500).send('Collections non trouvées.');
         }
-        let CollectionID = results[0].COLLECTIONID;
-        let nomCollection = results[0].NOMCOLLECTION;
-        console.log(nomCollection);
-
-        con.query('SELECT NAME, PRICE FROM PRODUIT where COLLECTIONID = ?', CollectionID, (err, produits) => {
-            if (err) {
-                console.error('Erreur avec la consultation de la BD.', err);
-                return res.status(500).send('Collection non trouvée.');
-            }
-            for (let index = 0; index < produits.length; index++) {
-                console.log(produits[index]);
-            }
-            res.render("pages/PageArticles.ejs", {
-                fondDEcran: "assets/img/FondDEcran.png",
-                produits: produits,
-                collection: nomCollection,
-                imgNonTrouvee: "assets/img/IMG_NONTROUVEE.jpg"
-            });
+        con.query('SELECT Nom, Prix FROM Produit', (err, produits) => {
+            MontrerCollection(produits, "Nos Produits", results, err, res);
         });
     });
 });
 
+// Refactorisacion - Recupera collection con filtro por categoria
+app.get("/collection/:id", function (req, res) {
+    let idFromParams = req.params.id;
+    console.log(idFromParams);
+
+    con.query('SELECT NomCollection, CollectionID FROM Collection', (errCollection, collections) => {
+        if (errCollection) {
+            console.error('Erreur avec la consultation de la BD.', errCollection);
+            return res.status(500).send('Collections non trouvées.');
+        }
+
+        var NomCollection = "";
+        for (let index = 0; index < collections.length; index++) {
+            if (collections[index].CollectionID == idFromParams) {
+                NomCollection = collections[index].NomCollection;
+
+                break;
+            }
+        }
+
+        con.query('SELECT Nom, Prix FROM Produit where CollectionID = ?', idFromParams, (errProduct, produits) => {
+            // checkear que no estê vacîo.
+
+            MontrerCollection(produits, NomCollection, collections, errProduct, res);
+        });
+    });
+})
+
+function MontrerCollection(ListeProduits, NomCollection, results, err, res) {
+    if (err) {
+        console.error('Erreur avec la consultation de la BD.', err);
+        return res.status(500).send('Collection non trouvée.');
+    }
+    var hrefFondDEcran = "assets/img/" + NomCollection + ".jpg";
+    if (NomCollection == "Nos Produits") {
+        hrefFondDEcran = "../" + hrefFondDEcran;
+    }
+    for (let index2 = 0; index2 < ListeProduits.length; index2++) {
+        console.log(ListeProduits[index2]);
+    }
+    res.render("pages/collection.ejs", {
+        fondDEcran: "assets/img/" + NomCollection + ".jpg",
+        produits: ListeProduits,
+        collection: NomCollection,
+        imgNonTrouvee: "assets/img/IMG_NONTROUVEE.jpg",
+        collections: results,
+    });
+}
+
+app.get("/checkout", function (req, res) {
+    res.render("pages/checkout");
+})
+
+app.get("/login", function (req, res) {
+    res.render("pages/login");
+})
+
+app.get("/signup", function (req, res) {
+    res.render("pages/signup");
+});
+
+// login endpoint api
+
+app.post("/login", function (req, res) {
+    const { email, password } = req.body;
+
+    con.query("SELECT * FROM CLIENT WHERE email = ? AND mdp = ?", [email, password], function (err, result) {
+        if (err) throw err;
+        if (result.length > 0) {
+            res.json({ message: "success" });
+        } else {
+            res.json({ message: "failed" });
+        }
+    });
+});
+
+// signup endpoint api
+
+app.post("/signup", function (req, res) {
+    const { prenom, nom, email, mdp } = req.body;
+
+    // Check if the email already exists in the database
+    con.query("SELECT * FROM CLIENT WHERE email = ?", [email], function (err, result) {
+        if (err) throw err;
+
+        if (result.length > 0) {
+            res.json({ message: "Email already exists. Please choose another email." });
+        } else {
+            // If email is unique, insert the new user into the database
+            con.query("INSERT INTO CLIENT (PRENOM, NOM, EMAIL, MDP) VALUES (?, ?, ?, ?)", [prenom, nom, email, mdp], function (err, result) {
+                if (err) throw err;
+
+                res.json({ message: "success" });
+            });
+        }
+    });
+});
+
+// expose assets
+
+app.listen(3000, function () {
+    console.log("serveur fonctionne sur http://localhost:3000 ... ! ");
+});
