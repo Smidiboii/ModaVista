@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="fr" data-bs-theme="auto">
+
+<head>
+    <%- include ("../partials/head.ejs") %>
+</head>
+
+<body>
+    <main>
+        <form class="container py-4">
+            <%- include ("../partials/header.ejs") %>
+                <h1 class="text-center mb-4">Se créer de compte</h2>
+                    <div class="card p-3">
+                        <div class="row">
+                            <div class="mb-3 col-sm-6">
+                                <label for="inputPrenom" class="col-form-label">Prénom</label>
+                                <input type="text" class="form-control" id="inputPrenom">
+                            </div>
+                            <div class="mb-3 col-sm-6">
+                                <label for="inputNom" class="col-form-label">Nom</label>
+                                <input type="text" class="form-control" id="inputNom">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="inputEmail">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
+                            <div class="col-sm-10">
+                                <input type="password" class="form-control" id="inputPassword">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="inputConfirmPassword" class="col-sm-2 col-form-label">Confirm Password</label>
+                            <div class="col-sm-10">
+                                <input type="password" class="form-control" id="inputConfirmPassword">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary mb-3">Créer de compte</button>
+                    </div>
+        </form>
+    </main>
+    <script>
+        // désactive la soumission par défaut du formulaire
+        document.querySelector('form').addEventListener('submit', function(event) {
+            signup();
+        });
+
+        function signup() {
+            const prenom = document.getElementById('inputPrenom').value;
+            const nom = document.getElementById('inputNom').value;
+            const email = document.getElementById('inputEmail').value;
+            const password = document.getElementById('inputPassword').value;
+            const confirmPassword = document.getElementById('inputConfirmPassword').value;
+
+            // Vérifie si les mots de passe correspondent
+            if (password !== confirmPassword) {
+                alert('Les mots de passe ne correspondent pas.');
+                return;
+            }
+
+            fetch("/signup", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        prenom,
+                        nom,
+                        email,
+                        'mdp': password
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message === 'success') {
+                        alert('Inscription réussie !');
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur :', error);
+                });
+        }
+    </script>
+</body>
+
+</html>

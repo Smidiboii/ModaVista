@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="fr" data-bs-theme="auto">
+
+<head>
+    <%- include ("../partials/head.ejs") %>
+</head>
+
+<body>
+    <main>
+        <form class="container py-4">
+            <%- include ("../partials/header.ejs") %>
+                <h1 class="text-center mb-4">Se connecter</h2>
+                    <div class="card p-3">
+                        <div class="mb-3 row">
+                            <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="inputEmail">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
+                            <div class="col-sm-10">
+                                <input type="password" class="form-control" id="inputPassword">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary mb-3">Se connecter</button>
+                    </div>
+        </form>
+    </main>
+
+    <script>
+        // disable the default form submission
+        document.querySelector('form').addEventListener('submit', function(event) {
+            login()
+        });
+
+        function login() {
+            const email = document.getElementById('inputEmail').value;
+            const password = document.getElementById('inputPassword').value;
+
+            fetch("/login", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email,
+                        password
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message === 'success') {
+                        alert('Login successful!');
+                    } else {
+                        alert('Login failed. Please check your credentials.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+    </script>
+</body>
+
+</html>
