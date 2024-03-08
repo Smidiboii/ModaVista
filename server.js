@@ -38,15 +38,20 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/assets', express.static(path.join(__dirname, 'views', 'assets')));
 
 app.get("/", function (req, res) {
-    ;
-    res.render("pages/index");
+    con.query("SELECT * FROM Produit ORDER BY Nom DESC LIMIT 6 ", (err, produits) => {
+        if (err) {
+            console.error('Erreur avec la consultation de la BD.', err);
+            return res.status(500).send('Collections non trouvées.');
+        }
+        res.render("pages/index", { produits: produits });
+    });
+
 })
 
 app.get("/compte", function (req, res) {
     res.render("pages/compte");
 })
 
-// Recupera la collection sin filtros.
 app.get("/collection", function (req, res) {
 
     con.query('SELECT NomCollection, CollectionID FROM Collection', (err, results) => {
@@ -54,13 +59,12 @@ app.get("/collection", function (req, res) {
             console.error('Erreur avec la consultation de la BD.', err);
             return res.status(500).send('Collections non trouvées.');
         }
-        con.query('SELECT Nom, Prix FROM Produit', (err, produits) => {
+        con.query('SELECT Nom, Prix, ProduitID FROM Produit', (err, produits) => {
             MontrerCollection(produits, "Nos Produits", results, err, res);
         });
     });
 });
 
-// Refactorisacion - Recupera collection con filtro por categoria
 app.get("/collection/:id", function (req, res) {
     let idFromParams = req.params.id;
     console.log(idFromParams);
@@ -80,8 +84,7 @@ app.get("/collection/:id", function (req, res) {
             }
         }
 
-        con.query('SELECT Nom, Prix FROM Produit where CollectionID = ?', idFromParams, (errProduct, produits) => {
-            // checkear que no estê vacîo.
+        con.query('SELECT Nom, Prix, ProduitID FROM Produit where CollectionID = ?', idFromParams, (errProduct, produits) => {
 
             MontrerCollection(produits, NomCollection, collections, errProduct, res);
         });
@@ -113,6 +116,14 @@ app.get("/checkout", function (req, res) {
     res.render("pages/checkout");
 })
 
+app.get("/produit/:id", function (req, res) {
+    const id = req.params.id;
+    con.query("SELECT * FROM Produit WHERE ProduitID = ?", [id], function (err, result) {
+        if (err) throw err;
+        res.render("pages/produit", { produit: result[0] });
+    });
+});
+
 app.get("/login", function (req, res) {
     res.render("pages/login");
 })
@@ -121,12 +132,11 @@ app.get("/signup", function (req, res) {
     res.render("pages/signup");
 });
 
-// login endpoint api
 
 app.post("/login", function (req, res) {
     const { email, password } = req.body;
 
-    con.query("SELECT * FROM CLIENT WHERE email = ? AND mdp = ?", [email, password], function (err, result) {
+    con.query("SELECT * FROM Client WHERE Email = ? AND Mdp = ?", [email, password], function (err, result) {
         if (err) throw err;
         if (result.length > 0) {
             res.json({ message: "success" });
@@ -136,20 +146,18 @@ app.post("/login", function (req, res) {
     });
 });
 
-// signup endpoint api
 
 app.post("/signup", function (req, res) {
     const { prenom, nom, email, mdp } = req.body;
 
-    // Check if the email already exists in the database
-    con.query("SELECT * FROM CLIENT WHERE email = ?", [email], function (err, result) {
+    con.query("SELECT * FROM Client WHERE Email = ?", [email], function (err, result) {
         if (err) throw err;
 
         if (result.length > 0) {
             res.json({ message: "Email already exists. Please choose another email." });
         } else {
-            // If email is unique, insert the new user into the database
-            con.query("INSERT INTO CLIENT (PRENOM, NOM, EMAIL, MDP) VALUES (?, ?, ?, ?)", [prenom, nom, email, mdp], function (err, result) {
+
+            con.query("INSERT INTO Client (Prenom, Nom, Email, Mdp) VALUES (?, ?, ?, ?)", [prenom, nom, email, mdp], function (err, result) {
                 if (err) throw err;
 
                 res.json({ message: "success" });

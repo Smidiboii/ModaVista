@@ -11,7 +11,8 @@
             <%- include ("../partials/header.ejs") %>
                 <div class="row">
                     <div class="col-md-6">
-                        <img src="/assets/img/<%= produit.Nom %>.png" alt="Image" class="img-fluid" style="width:100%;max-height: 400px;object-fit: cover;">
+                        <img src="/assets/img/IMG_<%= produit.Nom %>.jpg" alt="Image" class="img-fluid"
+                            style="width:100%;max-height: 400px;object-fit: cover;">
                     </div>
 
                     <div class="col-md-6">
@@ -21,10 +22,9 @@
                         <h2>
                             <%= produit.Taille %>
                         </h2>
-                        <p>
-                            <%= produit.Description %>
-                        </p>
-                        <p><strong><%= produit.Prix %> $</strong>+ taxes</p>
+                        <p><strong>
+                                <%= produit.Prix %> $
+                            </strong>+ taxes</p>
                         <button type="button" class="btn btn-dark">Ajouter au panier</button>
                     </div>
                 </div>

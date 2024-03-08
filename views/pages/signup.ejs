@@ -45,7 +45,7 @@
     </main>
     <script>
         // désactive la soumission par défaut du formulaire
-        document.querySelector('form').addEventListener('submit', function(event) {
+        document.querySelector('form').addEventListener('submit', function (event) {
             signup();
         });
 
@@ -63,17 +63,17 @@
             }
 
             fetch("/signup", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        prenom,
-                        nom,
-                        email,
-                        'mdp': password
-                    }),
-                })
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    prenom,
+                    nom,
+                    email,
+                    'mdp': password
+                }),
+            })
                 .then(response => response.json())
                 .then(data => {
                     if (data.message === 'success') {
