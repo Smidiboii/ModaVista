@@ -7,7 +7,11 @@
 
 <body>
     <main>
+<<<<<<< HEAD
         <div class="container py-4">
+=======
+        <form class="container py-4">
+>>>>>>> 2d4fb5c71b95f0c1d7ab7320e6523378857ccca5
             <%- include ("../partials/header.ejs") %>
                 <h1 class="text-center mb-4">Se créer de compte</h2>
                     <div class="card p-3">
@@ -41,8 +45,57 @@
                         </div>
                         <button type="submit" class="btn btn-primary mb-3">Créer de compte</button>
                     </div>
+<<<<<<< HEAD
         </div>
     </main>
+=======
+        </form>
+    </main>
+    <script>
+        // désactive la soumission par défaut du formulaire
+        document.querySelector('form').addEventListener('submit', function (event) {
+            signup();
+        });
+
+        function signup() {
+            const prenom = document.getElementById('inputPrenom').value;
+            const nom = document.getElementById('inputNom').value;
+            const email = document.getElementById('inputEmail').value;
+            const password = document.getElementById('inputPassword').value;
+            const confirmPassword = document.getElementById('inputConfirmPassword').value;
+
+            // Vérifie si les mots de passe correspondent
+            if (password !== confirmPassword) {
+                alert('Les mots de passe ne correspondent pas.');
+                return;
+            }
+
+            fetch("/signup", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    prenom,
+                    nom,
+                    email,
+                    'mdp': password
+                }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message === 'success') {
+                        alert('Inscription réussie !');
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur :', error);
+                });
+        }
+    </script>
+>>>>>>> 2d4fb5c71b95f0c1d7ab7320e6523378857ccca5
 </body>
 
 </html>

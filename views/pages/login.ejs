@@ -1,8 +1,12 @@
+<<<<<<< HEAD
 <!doctype html>
+=======
+>>>>>>> 2d4fb5c71b95f0c1d7ab7320e6523378857ccca5
 <html lang="fr" data-bs-theme="auto">
 
 <head>
     <%- include ("../partials/head.ejs") %>
+<<<<<<< HEAD
 </head>
 
 <body>
@@ -55,6 +59,105 @@
                 .catch(error => {
                     console.error('Error:', error);
                 });
+=======
+        <style>
+            body {
+                opacity: 0;
+                transition: opacity 1s ease-in-out;
+                background-color: #fff;
+                font-family: 'Arial', sans-serif;
+                margin: 0;
+                color: #000;
+            }
+
+            body.loaded {
+                opacity: 1;
+            }
+
+            .main-content {
+                opacity: 0;
+                transform: translateY(20px);
+                transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+                padding: 20px;
+                margin: 0 auto;
+            }
+
+            body.loaded .main-content {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            .card {
+                background-color: #fff;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                border-radius: 8px;
+                padding: 20px;
+                max-width: 600px;
+                margin: 0 auto;
+            }
+
+            h1 {
+                color: #000;
+                text-align: center;
+            }
+
+            label {
+                color: #000;
+            }
+
+            .form-control {
+                background-color: #fff;
+                color: #000;
+                border: 1px solid #000;
+                border-radius: 4px;
+            }
+
+            .btn-primary {
+                background-color: #000;
+                color: #fff;
+                border: 1px solid #000;
+                width: 100%;
+            }
+
+            .btn-primary:hover {
+                background-color: #333;
+                border-color: #333;
+            }
+        </style>
+</head>
+
+<body>
+    <main class="main-content">
+        <%- include ("../partials/header.ejs") %>
+            <form class="card" action="/login" method="post">
+                <h1>Se connecter</h1>
+                <div class="mb-3">
+                    <label for="inputEmail" class="form-label">Email</label>
+                    <input type="text" class="form-control" id="inputEmail" name="email" required>
+                </div>
+                <div class="mb-3">
+                    <label for="inputPassword" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="inputPassword" name="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Se connecter</button>
+            </form>
+    </main>
+
+    <script defer>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.body.classList.add('loaded');
+        });
+        document.querySelector('form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            login();
+        });
+
+        function login() {
+            const email = document.getElementById('inputEmail').value;
+            const password = document.getElementById('inputPassword').value;
+            console.log('Email:', email);
+            console.log('Password:', password);
+>>>>>>> 2d4fb5c71b95f0c1d7ab7320e6523378857ccca5
         }
     </script>
 </body>
