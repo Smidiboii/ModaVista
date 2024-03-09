@@ -1,6 +1,40 @@
-1.Avoir un user scott dans ça base de donnée.  
-2.Dans la base de donnée SQL mettre toute les tables qui se trouve dans tables.sql dans scott.  
-3.Dans le terminal de votre projet installer Node.js et npm si ce n'est pas deja fait grace à => npm install nodemon --save-dev  .
-4.Puis faire la commande => nodemon server.js    pour demarer le serveur.  
-5.S'assurer que le serveur ecoute bien sur le port 3000 . 
-6.Puis sur un navigateur web rentrer => http://localhost:3000     pour avoir accès a la page web.
+## Configuration de la Base de Données
+
+1. Assurez-vous d'avoir un utilisateur nommé 'scott' dans votre base de données SQL, avec une database 'scott' et un mot de passe, Oracle.
+
+2. Exécutez le script SQL suivant pour créer des tables dans le schéma 'scott'. Les définitions de ces tables se trouvent dans le fichier `tables.sql`:
+
+    ```sql
+    USE scott;
+    -- Exécutez le contenu de tables.sql ici
+    ```
+
+## Installation de Node.js et NPM
+
+Assurez-vous d'avoir Node.js et npm installés sur votre machine. Si ce n'est pas le cas, suivez les étapes ci-dessous :
+
+```
+sudo apt update
+sudo apt install nodejs
+sudo apt install npm
+```
+## Configuration du Projet
+Naviguez jusqu'au répertoire de votre projet dans le terminal.
+Installez nodemon en tant que dépendance de développement avec la commande suivante :
+
+```
+npm install nodemon --save-dev
+```
+Démarrez le serveur en utilisant la commande suivante :
+```
+nodemon server.js
+```
+Assurez-vous que le serveur écoute sur le port 3000 (Vu dans le terminal).
+
+## Accéder à la Page Web
+Ouvrez un navigateur web.
+Entrez l'URL suivante dans la barre d'adresse :
+```
+http://localhost:3000
+```
+Vous devriez maintenant avoir accès à la page web.
