@@ -30,7 +30,7 @@ create table Panier(
     ProduitID int not null,
     PrixTotal DECIMAL(10,2) not null,
     PromoCode varchar(10),
-    FOREIGN KEY (ClientID) REFERENCES Clients(ClientID),
+    FOREIGN KEY (ClientID) REFERENCES Client(ClientID),
     FOREIGN KEY (ProduitID) REFERENCES Produit(ProduitID)
 );
 create table Commande (
@@ -46,7 +46,7 @@ create table MethodePayement (
     CVC int not null,
     DateExpiration date not null,
     TypeDeCarte varchar(10) not null,
-    FOREIGN KEY (ClientID) REFERENCES Clients(ClientID)
+    FOREIGN KEY (ClientID) REFERENCES Client(ClientID)
 );
 create table CodePromo (
     CodeID int AUTO_INCREMENT PRIMARY KEY,
