@@ -1,25 +1,4 @@
 {
-<<<<<<< HEAD
-    "name": "modavista",
-    "version": "1.0.0",
-    "type": "module",
-    "description": "Site web de modavista",
-    "main": "server.js",
-    "scripts": {
-        "start": "nodemon server.js"
-    },
-    "author": "",
-    "license": "ISC",
-    "dependencies": {
-        "ejs": "^3.1.9",
-        "express": "^4.18.2",
-        "mysql": "^2.18.1"
-    },
-    "devDependencies": {
-        "nodemon": "^3.1.0"
-    }
-}
-=======
   "name": "modavista",
   "version": "1.0.0",
   "description": "",
@@ -41,4 +20,3 @@
     "mysql": "^2.18.1"
   }
 }
->>>>>>> 2d4fb5c71b95f0c1d7ab7320e6523378857ccca5
