@@ -151,14 +151,14 @@ app.post("/signup", function(req, res) {
     const { prenom, nom, email, mdp, tel, adresse } = req.body;
 
     // Check if the email already exists in the database
-    con.query("SELECT * FROM Clients WHERE Email = ?", [email], function(err, result) {
+    con.query("SELECT * FROM Client WHERE Email = ?", [email], function(err, result) {
         if (err) throw err;
 
         if (result.length > 0) {
             res.json({ message: "Email already exists. Please choose another email." });
         } else {
             // If email is unique, insert the new user into the database
-            con.query("INSERT INTO Clients (Prenom, Nom, Email, Mdp, TelNum, Adresse) VALUES (?, ?, ?, ?, ?, ?)", [prenom, nom, email, mdp, tel, adresse], function(err, result) {
+            con.query("INSERT INTO Client (Prenom, Nom, Email, Mdp, TelNum, Adresse) VALUES (?, ?, ?, ?, ?, ?)", [prenom, nom, email, mdp, tel, adresse], function(err, result) {
                 if (err) throw err;
 
                 //res.json({ message: "success" });
