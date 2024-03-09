@@ -4,9 +4,13 @@
     <%- include ("../partials/head.ejs") %>
         <style>
             body {
+                background-image: url('../assets/img/loginb.jpg');
+                background-size: 100% 100%;
+                background-position: center;
+                background-color: rgba(255, 255, 255, 0.7);
+                background-repeat: no-repeat;
                 opacity: 0;
                 transition: opacity 1s ease-in-out;
-                background-color: #fff;
                 font-family: 'Arial', sans-serif;
                 margin: 0;
             }
@@ -104,20 +108,20 @@
             console.log('Password:', password);
 
             fetch("/login", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        email,
-                        password
-                    }),
-                })
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email,
+                    password
+                }),
+            })
                 .then(response => response.json())
                 .then(data => {
                     if (data.message === 'success') {
                         alert('Login successful!');
-                        window.location.href = '/compte'; // Redirige l'utilisateur vers la page de compte, mais on la pas encore créée sur la bd.
+                        window.location.href = '/compte'; // Redirige l'utilisateur vers la page de compte, mais on la pas encore créée sur la bd
                     } else {
                         alert('Login failed.');
                     }
