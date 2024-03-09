@@ -1,6 +1,6 @@
 ## Configuration de la Base de Données
 
-1. Assurez-vous d'avoir un utilisateur nommé 'scott' dans votre base de données SQL, avec une database 'scott' et un mot de passe, Oracle.
+1. Assurez-vous d'avoir un utilisateur nommé 'scott' dans votre base de données SQL, avec une database 'scott' et un mot de passe "oracle".
 
 2. Exécutez le script SQL suivant pour créer des tables dans le schéma 'scott'. Les définitions de ces tables se trouvent dans le fichier `tables.sql`:
 
