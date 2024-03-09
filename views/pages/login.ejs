@@ -9,7 +9,6 @@
                 background-color: #fff;
                 font-family: 'Arial', sans-serif;
                 margin: 0;
-                color: #000;
             }
 
             body.loaded {
@@ -53,18 +52,6 @@
                 border: 1px solid #000;
                 border-radius: 4px;
             }
-
-            .btn-primary {
-                background-color: #000;
-                color: #fff;
-                border: 1px solid #000;
-                width: 100%;
-            }
-
-            .btn-primary:hover {
-                background-color: #333;
-                border-color: #333;
-            }
         </style>
 </head>
 
@@ -91,8 +78,24 @@
         });
         document.querySelector('form').addEventListener('submit', function (event) {
             event.preventDefault();
-            login();
+            debounceLogin();
         });
+
+        const debounceLogin = debounce(function () {
+            login();
+        }, 100);
+
+        function debounce(func, wait) {
+            let timeout;
+            return function () {
+                const context = this;
+                const args = arguments;
+                clearTimeout(timeout);
+                timeout = setTimeout(function () {
+                    func.apply(context, args);
+                }, wait);
+            };
+        }
 
         function login() {
             const email = document.getElementById('inputEmail').value;
