@@ -146,29 +146,27 @@ app.post("/login", function (req, res) {
     });
 });
 
-
 app.post("/signup", function(req, res) {
     const { prenom, nom, email, mdp, tel, adresse } = req.body;
-
-    // Check if the email already exists in the database
     con.query("SELECT * FROM Client WHERE Email = ?", [email], function(err, result) {
-        if (err) throw err;
-
+        if (err) {
+            res.status(500).json({ message: "Erreur interne du serveur" });
+            throw err;
+        }
         if (result.length > 0) {
-            res.json({ message: "Email already exists. Please choose another email." });
+            res.json({ message: "L'email existe déjà. Veuillez choisir un autre email." });
         } else {
-            // If email is unique, insert the new user into the database
             con.query("INSERT INTO Client (Prenom, Nom, Email, Mdp, TelNum, Adresse) VALUES (?, ?, ?, ?, ?, ?)", [prenom, nom, email, mdp, tel, adresse], function(err, result) {
-                if (err) throw err;
+                if (err) {
+                    res.status(500).json({ message: "Erreur interne du serveur" });
+                    throw err;
+                }
 
-                //res.json({ message: "success" });
-                //alert("success");
+                res.json({ message: "success" });
             });
         }
     });
 });
-
-// expose assets
 
 app.listen(3000, function () {
     console.log("serveur fonctionne sur http://localhost:3000 ... ! ");

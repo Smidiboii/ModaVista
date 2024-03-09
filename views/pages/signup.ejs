@@ -33,7 +33,54 @@
         </form>
         <%- include ("../partials/footer.ejs") %>
 
+        <main>
+            <script defer>
+                document.querySelector('form').addEventListener('submit', function (event) {
+                    event.preventDefault();
+                    signup();
+                });
         
+                function signup() {
+                    const prenom = document.getElementById('prenom').value;
+                    const nom = document.getElementById('nom').value;
+                    const email = document.getElementById('email').value;
+                    const password = document.getElementById('mdp').value;
+                    const tel = document.getElementById('tel').value;
+                    const adresse = document.getElementById('adresse').value;
+        
+                    // You can add additional validation if needed
+        
+                    fetch("/signup", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            prenom,
+                            nom,
+                            email,
+                            mdp: password,
+                            tel,
+                            adresse
+                        }),
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.message === 'success') {
+                                alert('Inscription réussie ! Redirection vers la page de connexion.');
+                                window.location.href = '/login';
+                            } else {
+                                alert('Erreur lors de l\'inscription: ' + data.message);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Erreur :', error);
+                        });
+                }
+            </script>
+            <form action="/signup" method="POST">
+            </form>
+
     </main>
 </body>
 
