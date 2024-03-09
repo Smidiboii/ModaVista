@@ -3,11 +3,44 @@
 
 <head>
     <%- include ("../partials/head.ejs") %>
+    <link rel="stylesheet" href="../assets/css/signupCSS.css">
 </head>
 
 <body>
     <main>
-        <form class="container py-4">
+
+        <%- include ("../partials/header.ejs") %>
+        <form action="/signup" method="POST">
+            <label for="prenom">Prénom :</label>
+            <input type="text" id="prenom" name="prenom" required><br>
+        
+            <label for="nom">Nom :</label>
+            <input type="text" id="nom" name="nom" required><br>
+        
+            <label for="email">Email :</label>
+            <input type="email" id="email" name="email" required><br>
+        
+            <label for="mdp">Mot de passe :</label>
+            <input type="password" id="mdp" name="mdp" required><br>
+        
+            <label for="tel">Téléphone :</label>
+            <input type="tel" id="tel" name="tel" required><br>
+        
+            <label for="adresse">Adresse :</label>
+            <input type="text" id="adresse" name="adresse" required><br>
+        
+            <input type="submit" value="Ajouter">
+        </form>
+        <%- include ("../partials/footer.ejs") %>
+
+        
+    </main>
+</body>
+
+</html>
+
+<!-- 
+        <div class="container py-4">
             <%- include ("../partials/header.ejs") %>
                 <h1 class="text-center mb-4">Se créer de compte</h2>
                     <div class="card p-3">
@@ -41,52 +74,4 @@
                         </div>
                         <button type="submit" class="btn btn-primary mb-3">Créer de compte</button>
                     </div>
-        </form>
-    </main>
-    <script>
-        // désactive la soumission par défaut du formulaire
-        document.querySelector('form').addEventListener('submit', function (event) {
-            signup();
-        });
-
-        function signup() {
-            const prenom = document.getElementById('inputPrenom').value;
-            const nom = document.getElementById('inputNom').value;
-            const email = document.getElementById('inputEmail').value;
-            const password = document.getElementById('inputPassword').value;
-            const confirmPassword = document.getElementById('inputConfirmPassword').value;
-
-            // Vérifie si les mots de passe correspondent
-            if (password !== confirmPassword) {
-                alert('Les mots de passe ne correspondent pas.');
-                return;
-            }
-
-            fetch("/signup", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    prenom,
-                    nom,
-                    email,
-                    'mdp': password
-                }),
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.message === 'success') {
-                        alert('Inscription réussie !');
-                    } else {
-                        alert(data.message);
-                    }
-                })
-                .catch(error => {
-                    console.error('Erreur :', error);
-                });
-        }
-    </script>
-</body>
-
-</html>
+        </div>-->
