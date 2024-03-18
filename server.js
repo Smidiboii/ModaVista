@@ -1,11 +1,12 @@
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
+import { MongoClient } from "mongodb";
+
 const app = express();
 const __filename = fileURLToPath(
     import.meta.url);
 const __dirname = path.dirname(__filename);
-import mysql from "mysql";
 
 /*
     Configuration de EJS
@@ -14,100 +15,92 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs")
 
 /*
-    Connection au server MySQL
+    Connection au serveur MongoDB
 */
-const con = mysql.createConnection({
-    host: "localhost",
-    user: "scott",
-    password: "oracle",
-    database: "scott"
-});
-con.connect(function(err) {
+const url = 'mongodb://localhost:27017';
+const dbName = 'yourDatabaseName';
+
+MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, function(err, client) {
     if (err) throw err;
-    console.log("connected!");
-});
+    console.log("Connected successfully to MongoDB server");
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+    const db = client.db(dbName);
 
+    app.use(express.json());
+    app.use(express.urlencoded({ extended: true }));
 
-/*
-    Description des routes
-*/
+    /*
+        Description des routes
+    */
 
-app.use('/assets', express.static(path.join(__dirname, 'views', 'assets')));
+    app.use('/assets', express.static(path.join(__dirname, 'views', 'assets')));
 
-app.get("/", function(req, res) {;
-    res.render("pages/index");
-})
-
-app.get("/compte", function(req, res) {
-    res.render("pages/compte");
-})
-
-app.get("/collection", function(req, res) {
-    res.render("pages/collection");
-})
-
-app.get("/checkout", function(req, res) {
-    res.render("pages/checkout");
-})
-
-app.get("/login", function(req, res) {
-    res.render("pages/login");
-})
-
-app.get("/signup", function(req, res) {
-    res.render("pages/signup");
-});
-
-app.get("/produit/:id", function(req, res) {
-    const id = req.params.id;
-    con.query("SELECT * FROM Produit WHERE ProduitID = ?", [id], function(err, result) {
-        if (err) throw err;
-        res.render("pages/produit", { produit: result[0] });
+    app.get("/", function(req, res) {
+        res.render("pages/index");
     });
-});
 
-// login endpoint api
-
-app.post("/login", function(req, res) {
-    const { email, password } = req.body;
-
-    con.query("SELECT * FROM Clients WHERE email = ? AND mdp = ?", [email, password], function(err, result) {
-        if (err) throw err;
-        if (result.length > 0) {
-            res.json({ message: "success" });
-        } else {
-            res.json({ message: "failed" });
-        }
+    app.get("/compte", function(req, res) {
+        res.render("pages/compte");
     });
-});
 
-// signup endpoint api
+    app.get("/collection", function(req, res) {
+        res.render("pages/collection");
+    });
 
-app.post("/signup", function(req, res) {
-    const { prenom, nom, email, mdp } = req.body;
+    app.get("/checkout", function(req, res) {
+        res.render("pages/checkout");
+    });
 
-    // Check if the email already exists in the database
-    con.query("SELECT * FROM Clients WHERE email = ?", [email], function(err, result) {
-        if (err) throw err;
+    app.get("/login", function(req, res) {
+        res.render("pages/login");
+    });
 
-        if (result.length > 0) {
-            res.json({ message: "Email already exists. Please choose another email." });
-        } else {
-            // If email is unique, insert the new user into the database
-            con.query("INSERT INTO Clients (PRENOM, NOM, EMAIL, MDP) VALUES (?, ?, ?, ?)", [prenom, nom, email, mdp], function(err, result) {
-                if (err) throw err;
+    app.get("/signup", function(req, res) {
+        res.render("pages/signup");
+    });
 
+    app.get("/produit/:id", function(req, res) {
+        const id = req.params.id;
+        const collection = db.collection('produit');
+        collection.findOne({ ProduitID: id }, function(err, result) {
+            if (err) throw err;
+            res.render("pages/produit", { produit: result });
+        });
+    });
+
+    // login endpoint api
+    app.post("/login", function(req, res) {
+        const { email, password } = req.body;
+        const collection = db.collection('clients');
+        collection.findOne({ email: email, mdp: password }, function(err, result) {
+            if (err) throw err;
+            if (result) {
                 res.json({ message: "success" });
-            });
-        }
+            } else {
+                res.json({ message: "failed" });
+            }
+        });
     });
-});
 
-// expose assets
+    // signup endpoint api
+    app.post("/signup", function(req, res) {
+        const { prenom, nom, email, mdp } = req.body;
+        const collection = db.collection('clients');
+        collection.findOne({ email: email }, function(err, result) {
+            if (err) throw err;
+            if (result) {
+                res.json({ message: "Email already exists. Please choose another email." });
+            } else {
+                collection.insertOne({ prenom: prenom, nom: nom, email: email, mdp: mdp }, function(err, result) {
+                    if (err) throw err;
+                    res.json({ message: "success" });
+                });
+            }
+        });
+    });
 
-app.listen(3000, function() {
-    console.log("serveur fonctionne sur http://localhost:3000 ... ! ");
+    // expose assets
+    app.listen(3000, function() {
+        console.log("serveur fonctionne sur http://localhost:3000 ... ! ");
+    });
 });
