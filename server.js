@@ -22,11 +22,7 @@ const con = mysql.createConnection({
     password: "oracle",
     database: "scott"
 });
-<<<<<<< HEAD
-con.connect(function(err) {
-=======
 con.connect(function (err) {
->>>>>>> main
     if (err) throw err;
     console.log("connected!");
 });
@@ -41,38 +37,6 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/assets', express.static(path.join(__dirname, 'views', 'assets')));
 
-<<<<<<< HEAD
-app.get("/", function(req, res) {;
-    res.render("pages/index");
-})
-
-app.get("/compte", function(req, res) {
-    res.render("pages/compte");
-})
-
-app.get("/collection", function(req, res) {
-    res.render("pages/collection");
-})
-
-app.get("/checkout", function(req, res) {
-    res.render("pages/checkout");
-})
-
-app.get("/login", function(req, res) {
-    res.render("pages/login");
-})
-
-app.get("/signup", function(req, res) {
-    res.render("pages/signup");
-});
-
-// login endpoint api
-
-app.post("/login", function(req, res) {
-    const { email, password } = req.body;
-
-    con.query("SELECT * FROM CLIENT WHERE email = ? AND mdp = ?", [email, password], function(err, result) {
-=======
 app.get("/", function (req, res) {
     con.query("SELECT * FROM Produit ORDER BY Nom DESC LIMIT 6 ", (err, produits) => {
         if (err) {
@@ -173,7 +137,6 @@ app.post("/login", function (req, res) {
     const { email, password } = req.body;
 
     con.query("SELECT * FROM Client WHERE Email = ? AND Mdp = ?", [email, password], function (err, result) {
->>>>>>> main
         if (err) throw err;
         if (result.length > 0) {
             res.json({ message: "success" });
@@ -183,23 +146,6 @@ app.post("/login", function (req, res) {
     });
 });
 
-<<<<<<< HEAD
-// signup endpoint api
-
-app.post("/signup", function(req, res) {
-    const { prenom, nom, email, mdp } = req.body;
-
-    // Check if the email already exists in the database
-    con.query("SELECT * FROM CLIENT WHERE email = ?", [email], function(err, result) {
-        if (err) throw err;
-
-        if (result.length > 0) {
-            res.json({ message: "Email already exists. Please choose another email." });
-        } else {
-            // If email is unique, insert the new user into the database
-            con.query("INSERT INTO CLIENT (PRENOM, NOM, EMAIL, MDP) VALUES (?, ?, ?, ?)", [prenom, nom, email, mdp], function(err, result) {
-                if (err) throw err;
-=======
 app.post("/signup", function(req, res) {
     const { prenom, nom, email, mdp, tel, adresse } = req.body;
     con.query("SELECT * FROM Client WHERE Email = ?", [email], function(err, result) {
@@ -215,7 +161,6 @@ app.post("/signup", function(req, res) {
                     res.status(500).json({ message: "Erreur interne du serveur" });
                     throw err;
                 }
->>>>>>> main
 
                 res.json({ message: "success" });
             });
@@ -223,14 +168,6 @@ app.post("/signup", function(req, res) {
     });
 });
 
-<<<<<<< HEAD
-// expose assets
-
-app.listen(3000, function() {
-    console.log("serveur fonctionne sur http://localhost:3000 ... ! ");
-});
-=======
 app.listen(3000, function () {
     console.log("serveur fonctionne sur http://localhost:3000 ... ! ");
 });
->>>>>>> main
