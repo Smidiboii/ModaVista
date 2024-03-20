@@ -6,6 +6,7 @@ const __filename = fileURLToPath(
     import.meta.url);
 const __dirname = path.dirname(__filename);
 import mysql from "mysql";
+import { MongoClient } from "mongodb";
 
 /*
     Configuration de EJS
@@ -30,7 +31,22 @@ con.connect(function (err) {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+/*
+    Connection à MongoDB
+*/
+const uri = "mongodb://localhost:27017";
+const client = new MongoClient(uri);
 
+async function connectToMongoDB() {
+    try {
+        await client.connect();
+        console.log("Connected to MongoDB");
+    } catch (err) {
+        console.error('Erreur avec la consultation de la BD.', err);
+    }
+}
+
+connectToMongoDB();
 /*
     Description des routes
 */
@@ -65,43 +81,84 @@ app.get("/collection", function (req, res) {
     });
 });
 
-app.get("/collection/:id", function (req, res) {
+// app.get("/collection/:id", function (req, res) {
+//     let idFromParams = req.params.id;
+//     console.log(idFromParams);
+
+//     con.query('SELECT NomCollection, CollectionID FROM Collection', (errCollection, collections) => {
+//         if (errCollection) {
+//             console.error('Erreur avec la consultation de la BD.', errCollection);
+//             return res.status(500).send('Collections non trouvées.');
+//         }
+
+//         var NomCollection = "";
+//         for (let index = 0; index < collections.length; index++) {
+//             if (collections[index].CollectionID == idFromParams) {
+//                 NomCollection = collections[index].NomCollection;
+
+//                 break;
+//             }
+//         }
+
+
+//         con.query('SELECT Nom, Prix, ProduitID FROM Produit where CollectionID = ?', idFromParams, (errProduct, produits) => {
+
+//             MontrerCollection(produits, NomCollection, collections, errProduct, res);
+//         });
+//     });
+// })
+
+app.get("/collection/:id", async (req, res) => {
     let idFromParams = req.params.id;
     console.log(idFromParams);
 
-    con.query('SELECT NomCollection, CollectionID FROM Collection', (errCollection, collections) => {
-        if (errCollection) {
-            console.error('Erreur avec la consultation de la BD.', errCollection);
-            return res.status(500).send('Collections non trouvées.');
-        }
+    try {
+        const db = client.db('Modavista');
+        const ListeProduits = db.collection('Produit');
+        const produits = await ListeProduits.find({}).toArray();
+        const collections = await ObtenirCollections(idFromParams, res);
+        console.log(produits);
 
-        var NomCollection = "";
-        for (let index = 0; index < collections.length; index++) {
-            if (collections[index].CollectionID == idFromParams) {
-                NomCollection = collections[index].NomCollection;
+        MontrerCollection(produits, collections[0], collections[1], res, idFromParams);
+    } catch (err) {
+        console.error('Erreur avec la consultation de la BD.', err);
 
-                break;
-            }
-        }
-
-        con.query('SELECT Nom, Prix, ProduitID FROM Produit where CollectionID = ?', idFromParams, (errProduct, produits) => {
-
-            MontrerCollection(produits, NomCollection, collections, errProduct, res);
-        });
-    });
+    }
 })
 
-function MontrerCollection(ListeProduits, NomCollection, results, err, res) {
-    if (err) {
-        console.error('Erreur avec la consultation de la BD.', err);
-        return res.status(500).send('Collection non trouvée.');
-    }
+function ObtenirCollections(idFromParams, res) {
+    return new Promise((resolve, reject) => {
+        con.query('SELECT NomCollection, CollectionID FROM Collection', (errCollection, collections) => {
+            if (errCollection) {
+                console.error('Erreur avec la consultation de la BD.', errCollection);
+                res.status(500).send('Collections non trouvées.');
+                reject(errCollection);
+            } else {
+                var NomCollection = "";
+                for (let index = 0; index < collections.length; index++) {
+                    if (collections[index].CollectionID == idFromParams) {
+                        NomCollection = collections[index].NomCollection;
+                        break;
+                    }
+                }
+                var data = [NomCollection, collections];
+                resolve(data);
+            }
+        });
+    });
+}
+
+function MontrerCollection(ListeProduits, NomCollection, results, res, idFromParams) {
+    console.log(NomCollection);
     var hrefFondDEcran = "assets/img/" + NomCollection + ".jpg";
     if (NomCollection == "Nos Produits") {
         hrefFondDEcran = "../" + hrefFondDEcran;
     }
     for (let index2 = 0; index2 < ListeProduits.length; index2++) {
-        console.log(ListeProduits[index2]);
+        if (ListeProduits[index2].CollectionID != idFromParams) {
+            console.log(ListeProduits[index2]);
+            ListeProduits.splice(index2, 1);
+        }
     }
     res.render("pages/collection.ejs", {
         fondDEcran: "assets/img/" + NomCollection + ".jpg",
@@ -146,9 +203,9 @@ app.post("/login", function (req, res) {
     });
 });
 
-app.post("/signup", function(req, res) {
+app.post("/signup", function (req, res) {
     const { prenom, nom, email, mdp, tel, adresse } = req.body;
-    con.query("SELECT * FROM Client WHERE Email = ?", [email], function(err, result) {
+    con.query("SELECT * FROM Client WHERE Email = ?", [email], function (err, result) {
         if (err) {
             res.status(500).json({ message: "Erreur interne du serveur" });
             throw err;
@@ -156,7 +213,7 @@ app.post("/signup", function(req, res) {
         if (result.length > 0) {
             res.json({ message: "L'email existe déjà. Veuillez choisir un autre email." });
         } else {
-            con.query("INSERT INTO Client (Prenom, Nom, Email, Mdp, TelNum, Adresse) VALUES (?, ?, ?, ?, ?, ?)", [prenom, nom, email, mdp, tel, adresse], function(err, result) {
+            con.query("INSERT INTO Client (Prenom, Nom, Email, Mdp, TelNum, Adresse) VALUES (?, ?, ?, ?, ?, ?)", [prenom, nom, email, mdp, tel, adresse], function (err, result) {
                 if (err) {
                     res.status(500).json({ message: "Erreur interne du serveur" });
                     throw err;
