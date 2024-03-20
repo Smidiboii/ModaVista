@@ -3,10 +3,15 @@
 
 <head>
     <%- include ("../partials/head.ejs") %>
+<<<<<<< HEAD
+=======
+    <link rel="stylesheet" href="../assets/css/signupCSS.css">
+>>>>>>> main
 </head>
 
 <body>
     <main>
+<<<<<<< HEAD
         <div class="container py-4">
             <%- include ("../partials/header.ejs") %>
                 <h1 class="text-center mb-4">Se créer de compte</h2>
@@ -46,3 +51,83 @@
 </body>
 
 </html>
+=======
+
+        <%- include ("../partials/header.ejs") %>
+        <form action="/signup" method="POST">
+            <label for="prenom">Prénom :</label>
+            <input type="text" id="prenom" name="prenom" required><br>
+        
+            <label for="nom">Nom :</label>
+            <input type="text" id="nom" name="nom" required><br>
+        
+            <label for="email">Email :</label>
+            <input type="email" id="email" name="email" required><br>
+        
+            <label for="mdp">Mot de passe :</label>
+            <input type="password" id="mdp" name="mdp" required><br>
+        
+            <label for="tel">Téléphone :</label>
+            <input type="tel" id="tel" name="tel" required><br>
+        
+            <label for="adresse">Adresse :</label>
+            <input type="text" id="adresse" name="adresse" required><br>
+        
+            <input type="submit" value="Ajouter">
+        </form>
+        <%- include ("../partials/footer.ejs") %>
+
+        <main>
+            <script defer>
+                document.querySelector('form').addEventListener('submit', function (event) {
+                    event.preventDefault();
+                    signup();
+                });
+        
+                function signup() {
+                    const prenom = document.getElementById('prenom').value;
+                    const nom = document.getElementById('nom').value;
+                    const email = document.getElementById('email').value;
+                    const password = document.getElementById('mdp').value;
+                    const tel = document.getElementById('tel').value;
+                    const adresse = document.getElementById('adresse').value;
+        
+
+        
+                    fetch("/signup", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            prenom,
+                            nom,
+                            email,
+                            mdp: password,
+                            tel,
+                            adresse
+                        }),
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.message === 'success') {
+                                alert('Inscription réussie ! Redirection vers la page de connexion.');
+                                window.location.href = '/login';
+                            } else {
+                                alert('Erreur lors de l\'inscription: ' + data.message);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Erreur :', error);
+                        });
+                }
+            </script>
+            <form action="/signup" method="POST">
+            </form>
+
+    </main>
+</body>
+
+</html>
+
+>>>>>>> main

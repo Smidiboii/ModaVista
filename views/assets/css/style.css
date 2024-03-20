@@ -88,8 +88,20 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+<<<<<<< HEAD
 }
 
+=======
+    background-color: rgb(255, 255, 255);
+    background-size: cover;
+}
+
+.card {
+    position: static;
+}
+
+
+>>>>>>> main
 footer {
     background-color: black;
 }
@@ -97,4 +109,32 @@ footer {
 .f-link {
     color: white;
     text-decoration: none;
+<<<<<<< HEAD
+=======
+}
+
+h2 {
+    margin-top: 10px;
+}
+
+.border-bottom {
+    background-color: rgb(255, 255, 255);
+    background-size: cover;
+}
+
+a {
+    text-decoration: none;
+}
+
+.login-page {
+    width: 100%;
+    height: 100vh;
+    display: inline-block;
+    display: flex;
+    align-items: center;
+}
+
+.form-right i {
+    font-size: 100px;
+>>>>>>> main
 }
