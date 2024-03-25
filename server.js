@@ -34,7 +34,7 @@ app.use(express.urlencoded({ extended: true }));
 /*
     Connection à MongoDB
 */
-const uri = "mongodb://localhost:27017";
+const uri = "mongodb+srv://scott:oracle@bdmodavista.welwlkh.mongodb.net/";
 const client = new MongoClient(uri);
 
 async function connectToMongoDB() {
@@ -68,46 +68,6 @@ app.get("/compte", function (req, res) {
     res.render("pages/compte");
 })
 
-app.get("/collection", function (req, res) {
-
-    con.query('SELECT NomCollection, CollectionID FROM Collection', (err, results) => {
-        if (err) {
-            console.error('Erreur avec la consultation de la BD.', err);
-            return res.status(500).send('Collections non trouvées.');
-        }
-        con.query('SELECT Nom, Prix, ProduitID FROM Produit', (err, produits) => {
-            MontrerCollection(produits, "Nos Produits", results, err, res);
-        });
-    });
-});
-
-// app.get("/collection/:id", function (req, res) {
-//     let idFromParams = req.params.id;
-//     console.log(idFromParams);
-
-//     con.query('SELECT NomCollection, CollectionID FROM Collection', (errCollection, collections) => {
-//         if (errCollection) {
-//             console.error('Erreur avec la consultation de la BD.', errCollection);
-//             return res.status(500).send('Collections non trouvées.');
-//         }
-
-//         var NomCollection = "";
-//         for (let index = 0; index < collections.length; index++) {
-//             if (collections[index].CollectionID == idFromParams) {
-//                 NomCollection = collections[index].NomCollection;
-
-//                 break;
-//             }
-//         }
-
-
-//         con.query('SELECT Nom, Prix, ProduitID FROM Produit where CollectionID = ?', idFromParams, (errProduct, produits) => {
-
-//             MontrerCollection(produits, NomCollection, collections, errProduct, res);
-//         });
-//     });
-// })
-
 app.get("/collection/:id", async (req, res) => {
     let idFromParams = req.params.id;
     console.log(idFromParams);
@@ -115,7 +75,7 @@ app.get("/collection/:id", async (req, res) => {
     try {
         const db = client.db('Modavista');
         const ListeProduits = db.collection('Produit');
-        const produits = await ListeProduits.find({}).toArray();
+        const produits = await ListeProduits.find({ 'CollectionID': { $eq: Number(idFromParams) } }).project({ 'Nom': 1, 'Prix': 1, 'ProduitID': 1 }).toArray();
         const collections = await ObtenirCollections(idFromParams, res);
         console.log(produits);
 
@@ -153,12 +113,6 @@ function MontrerCollection(ListeProduits, NomCollection, results, res, idFromPar
     var hrefFondDEcran = "assets/img/" + NomCollection + ".jpg";
     if (NomCollection == "Nos Produits") {
         hrefFondDEcran = "../" + hrefFondDEcran;
-    }
-    for (let index2 = 0; index2 < ListeProduits.length; index2++) {
-        if (ListeProduits[index2].CollectionID != idFromParams) {
-            console.log(ListeProduits[index2]);
-            ListeProduits.splice(index2, 1);
-        }
     }
     res.render("pages/collection.ejs", {
         fondDEcran: "assets/img/" + NomCollection + ".jpg",
