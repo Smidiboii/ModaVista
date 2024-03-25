@@ -1,0 +1,126 @@
+db.createCollection("Client", {
+  validator: {
+    $jsonSchema: {
+      bsonType: "object",
+      required: ["Prenom", "Nom", "Email", "Mdp", "TelNum", "Adresse", "DateCreation"],
+      properties: {
+        Prenom: { bsonType: "string" },
+        Nom: { bsonType: "string" },
+        Email: { bsonType: "string" },
+        Mdp: { bsonType: "string" },
+        TelNum: { bsonType: "string" },
+        Adresse: { bsonType: "string" },
+        DateCreation: { bsonType: "date" }
+      }
+    }
+  }
+})
+
+db.createCollection("Collection", {
+  validator: {
+    $jsonSchema: {
+      bsonType: "object",
+      required: ["NomCollection"],
+      properties: {
+        NomCollection: { bsonType: "string" }
+      }
+    }
+  }
+})
+
+db.createCollection("Produit", {
+  validator: {
+    $jsonSchema: {
+      bsonType: "object",
+      required: ["Nom", "TypeProduit", "Marque", "Taille", "Prix", "CollectionID"],
+      properties: {
+        Nom: { bsonType: "string" },
+        TypeProduit: { bsonType: "string" },
+        Marque: { bsonType: "string" },
+        Taille: { bsonType: "string" },
+        Prix: { bsonType: "double" },
+        CollectionID: { bsonType: "int" }
+      }
+    }
+  }
+})
+
+db.createCollection("Panier", {
+  validator: {
+    $jsonSchema: {
+      bsonType: "object",
+      required: ["ClientID", "ProduitID", "PrixTotal", "PromoCode"],
+      properties: {
+        ClientID: { bsonType: "int" },
+        ProduitID: { bsonType: "int" },
+        PrixTotal: { bsonType: "double" },
+        PromoCode: { bsonType: "string" }
+      }
+    }
+  }
+})
+
+db.createCollection("Commande", {
+  validator: {
+    $jsonSchema: {
+      bsonType: "object",
+      required: ["OrderDate", "PanierID", "Etat"],
+      properties: {
+        OrderDate: { bsonType: "date" },
+        PanierID: { bsonType: "int" },
+        Etat: { bsonType: "string" }
+      }
+    }
+  }
+})
+
+db.createCollection("MethodePayement", {
+  validator: {
+    $jsonSchema: {
+      bsonType: "object",
+      required: ["ClientID", "CarteCredit", "CVC", "DateExpiration", "TypeDeCarte"],
+      properties: {
+        ClientID: { bsonType: "int" },
+        CarteCredit: { bsonType: "int" },
+        CVC: { bsonType: "int" },
+        DateExpiration: { bsonType: "date" },
+        TypeDeCarte: { bsonType: "string" }
+      }
+    }
+  }
+})
+
+db.createCollection("CodePromo", {
+  validator: {
+    $jsonSchema: {
+      bsonType: "object",
+      required: ["PourcentageRabais", "Expiration"],
+      properties: {
+        PourcentageRabais: { bsonType: "int" },
+        Expiration: { bsonType: "date" }
+      }
+    }
+  }
+})
+
+//exemples
+
+db.Collection.insertMany([
+  { NomCollection: "ETE 2024" },
+  { NomCollection: "Hiver 2024" },
+  { NomCollection: "Saint-Valentin 2024" }
+]);
+
+db.Produit.insertMany([
+  { Nom: "T-shirt blanc", TypeProduit: "T-shirt", Marque: "Zara", Taille: "M", Prix: 19.99, CollectionID: 1 },
+  { Nom: "Robe fleurie", TypeProduit: "Robe", Marque: "H&M", Taille: "S", Prix: 29.99, CollectionID: 1 },
+  { Nom: "Short en jean", TypeProduit: "Short", Marque: "Levis", Taille: "L", Prix: 39.99, CollectionID: 1 },
+  { Nom: "Veste en cuir", TypeProduit: "Veste", Marque: "Gucci", Taille: "XL", Prix: 499.99, CollectionID: 1 },
+  { Nom: "Pull en laine", TypeProduit: "Pull", Marque: "Lacoste", Taille: "M", Prix: 59.99, CollectionID: 2 },
+  { Nom: "Pantalon noir", TypeProduit: "Pantalon", Marque: "Armani", Taille: "S", Prix: 79.99, CollectionID: 2 },
+  { Nom: "Coton ouaite", TypeProduit: "Veste", Marque: "Armando", Taille: "M", Prix: 89.99, CollectionID: 2 },
+  { Nom: "Jeans Futuristes", TypeProduit: "Pantalon", Marque: "CyberUrban", Taille: "M", Prix: 149.99, CollectionID: 2 },
+  { Nom: "Chemise rouge", TypeProduit: "Chemise", Marque: "Tommy Hilfiger", Taille: "M", Prix: 49.99, CollectionID: 3 },
+  { Nom: "Jupe plissée", TypeProduit: "Jupe", Marque: "Dior", Taille: "S", Prix: 99.99, CollectionID: 3 },
+  { Nom: "Collier en or", TypeProduit: "Bijou", Marque: "Tiffany", Taille: "U", Prix: 199.99, CollectionID: 3 }
+]);
