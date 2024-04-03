@@ -1,1 +1,0 @@
-afficher details du produit selectionne
