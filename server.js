@@ -2,7 +2,6 @@ import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
 import mongoose from "mongoose";
-import Produit from "./models/produit.js";
 
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
@@ -42,72 +41,17 @@ app.get("/", function (req, res) {
 	res.render("pages/index");
 });
 
-// app.get("/compte", function (req, res) {
-// 	res.render("pages/compte");
-// });
+app.get("/lol", function (req, res) {
+	res.render("pages/index");
+});
 
-// app.get("/collection", function (req, res) {
-// 	res.render("pages/collection");
-// });
-
-// app.get("/checkout", function (req, res) {
-// 	res.render("pages/checkout");
-// });
-
-// app.get("/login", function (req, res) {
-// 	res.render("pages/login");
-// });
-
-// app.get("/signup", function (req, res) {
-// 	res.render("pages/signup");
-// });
-
-// app.get("/produit/:id", async function (req, res) {
-// 	const id = req.params.id;
-// 	try {
-// 		const produit = await Produit.findOne({ ProduitID: id });
-// 		res.render("pages/produit", { produit: produit });
-// 	} catch (err) {
-// 		console.error("Error finding product:", err);
-// 		res.sendStatus(500);
-// 	}
-// });
-
-// // login endpoint api
-// app.post("/login", function (req, res) {
-// 	const { email, password } = req.body;
-// 	const collection = db.collection("clients");
-// 	collection.findOne({ email: email, mdp: password }, function (err, result) {
-// 		if (err) throw err;
-// 		if (result) {
-// 			res.json({ message: "success" });
-// 		} else {
-// 			res.json({ message: "failed" });
-// 		}
-// 	});
-// });
-
-// // signup endpoint api
-// app.post("/signup", function (req, res) {
-// 	const { prenom, nom, email, mdp } = req.body;
-// 	const collection = db.collection("clients");
-// 	collection.findOne({ email: email }, function (err, result) {
-// 		if (err) throw err;
-// 		if (result) {
-// 			res.json({ message: "Email already exists. Please choose another email." });
-// 		} else {
-// 			collection.insertOne(
-// 				{ prenom: prenom, nom: nom, email: email, mdp: mdp },
-// 				function (err, result) {
-// 					if (err) throw err;
-// 					res.json({ message: "success" });
-// 				}
-// 			);
-// 		}
-// 	});
-// });
+// 404 error
+app.all("*", (req, res, next) => {
+	res.render("pages/404");
+	next();
+});
 
 // expose assets
 app.listen(3000, function () {
-	console.log("Le serveur fonctionne sur http://localhost:3000 ... ! ");
+	console.log("Le serveur fonctionne sur http://localhost:3000");
 });
