@@ -3,6 +3,7 @@ import Client from "./models/client.js";
 import CodePromo from "./models/codePromo.js";
 import Collection from "./models/collection.js";
 import Produit from "./models/produit.js";
+import "dotenv/config";
 
 (async () => {
 	const db = mongoose.connection;
@@ -15,7 +16,7 @@ import Produit from "./models/produit.js";
 		console.log("Connected to MongoDB");
 	});
 
-	await mongoose.connect("mongodb://localhost:27017/db");
+	await mongoose.connect(process.env.MONGO_URI);
 
 	// clear the database
 	console.log("Clearing the database...");

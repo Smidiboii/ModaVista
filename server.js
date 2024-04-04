@@ -3,7 +3,8 @@ import path from "path";
 import { fileURLToPath } from "url";
 import mongoose from "mongoose";
 import errorHandler from "./middleware/errorHandler.js";
-import pages from "./routes/pages.js";
+import routePages from "./routes/pages.js";
+import routeApi from "./routes/api.js";
 
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
@@ -18,8 +19,7 @@ app.set("view engine", "ejs");
 /*
     Connection au serveur MongoDB avec Mongoose
 */
-const uri = "mongodb://localhost:27017/db";
-mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
 
 db.on("error", (err) => {
@@ -39,12 +39,12 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/assets", express.static(path.join(__dirname, "views", "assets")));
 
-app.use("/", pages);
+app.use("/", routePages);
+app.use("/api", routeApi);
 
 // 404 error
-app.all("*", (req, res, next) => {
-	res.render("pages/404");
-	next();
+app.use("*", (req, res, next) => {
+	res.status(404).render("pages/404");
 });
 
 app.use(errorHandler);
