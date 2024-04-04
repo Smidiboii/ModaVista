@@ -37,7 +37,7 @@ _________________________________________________________
 						</button>
 					</div>
 					<div class="modal-body">
-						<form action="customer-orders.html" method="post">
+						<form id="login-form" method="post">
 							<div class="form-group">
 								<input id="email-modal" type="text" placeholder="email" class="form-control" />
 							</div>
@@ -408,3 +408,35 @@ _________________________________________________________
 		</div>
 	</nav>
 </header>
+
+<script>
+	const form = document.getElementById("login-form");
+
+	form.addEventListener("submit", async (e) => {
+		e.preventDefault();
+
+		const email = document.getElementById("email-modal").value;
+		const password = document.getElementById("password-modal").value;
+
+		const response = await fetch("/api/login", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				email: email,
+				mdp: password,
+			}),
+		});
+
+		const data = await response.json();
+
+		if (response.ok) {
+			alert(data.message);
+			document.cookie = `token=${data.token}`;
+			window.location.href = "/";
+		} else {
+			alert("Erreur : " + data.message);
+		}
+	});
+</script>
