@@ -38,9 +38,9 @@ app.use(express.urlencoded({ extended: true }));
 */
 
 app.use("/assets", express.static(path.join(__dirname, "views", "assets")));
+app.use("/api", routeApi);
 
 app.use("/", routePages);
-app.use("/api", routeApi);
 
 // 404 error
 app.use("*", (req, res, next) => {
