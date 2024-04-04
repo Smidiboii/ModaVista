@@ -55,6 +55,17 @@ pages.get(
 	})
 );
 
+pages.get(
+	"/product/:produitId",
+	tryCatch(async (req, res) => {
+		const { produitId } = req.params;
+
+		const produit = await Produit.findById(produitId);
+
+		res.render("pages/product", { ...req.sharedData, produit });
+	})
+);
+
 pages.use("*", (req, res, next) => {
 	res.status(404).render("pages/404", req.sharedData);
 });
