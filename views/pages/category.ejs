@@ -30,22 +30,8 @@
 								<% produits.forEach(function(product) { if (product.genre !== gender) { return; } %>
 								<div class="col-lg-4 col-md-6">
 									<div class="product">
-										<div class="flip-container">
-											<div class="flipper">
-												<div class="front">
-													<a href="detail.html"
-														><img src="/assets/img/<%= product.image1 %>" alt="" class="img-fluid"
-													/></a>
-												</div>
-												<div class="back">
-													<a href="detail.html"
-														><img src="/assets/img/<%= product.nom %>" alt="" class="img-fluid"
-													/></a>
-												</div>
-											</div>
-										</div>
-										<a href="detail.html" class="invisible"
-											><img src="/assets/img/<%= product.nom %>" alt="" class="img-fluid"
+										<a href="detail.html"
+											><img src="/assets/img/<%= product.nom %>.jpg" alt="" class="img-fluid"
 										/></a>
 										<div class="text">
 											<h3><a href="detail.html"><%= product.nom %></a></h3>
