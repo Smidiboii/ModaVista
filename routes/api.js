@@ -1,9 +1,11 @@
 import express from "express";
 import { validateEmail } from "../utils/utils.js";
 import Client from "../models/client.js";
+import Collection from "../models/collection.js";
 import bcrypt from "bcrypt";
 import "dotenv/config";
 import jwt from "jsonwebtoken";
+import auth from "../middleware/auth.js";
 
 const api = express.Router();
 
@@ -22,7 +24,7 @@ api.post("/signup", async (req, res) => {
 		return res.status(400).json({ message: "Mot de passe trop court" });
 	}
 
-	const emailExists = Client.findOne({ email });
+	const emailExists = await Client.exists({ email });
 
 	if (emailExists) {
 		return res.status(400).json({ message: "Adresse email est déjà utilisée" });
@@ -66,6 +68,16 @@ api.post("/login", async (req, res) => {
 	const token = jwt.sign({ userId: client._id }, process.env.JWT_SECRET_TOKEN);
 
 	return res.status(200).json({ message: "Vous êtes connecté", token });
+});
+
+api.get("/collections", async (req, res) => {
+	const collections = await Collection.find();
+
+	return res.status(200).json(collections);
+});
+
+api.get("/check-auth", auth, async (req, res) => {
+	return res.status(200).json({ message: "Auth successful", userId: req.auth.userId });
 });
 
 export default api;
