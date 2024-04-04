@@ -16,4 +16,4 @@ const commandeSchema = new mongoose.Schema({
 	orderDate: { type: Date, required: true, default: Date.now },
 });
 
-module.exports = mongoose.model("Commande", commandeSchema);
+export default mongoose.model("Commande", commandeSchema);

@@ -8,4 +8,4 @@ const clientSchema = new mongoose.Schema({
 	dateCreation: { type: Date, required: true, default: Date.now },
 });
 
-module.exports = mongoose.model("Client", clientSchema);
+export default mongoose.model("Client", clientSchema);

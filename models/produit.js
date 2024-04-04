@@ -5,6 +5,7 @@ const produitSchema = new mongoose.Schema({
 	description: { type: String, required: true },
 	marque: { type: String, required: true },
 	taille: { type: String, required: true, enum: ["S", "M", "L", "XL"] },
+	genre: { type: String, required: true, enum: ["H", "F"] },
 	prix: { type: Number, required: true },
 	collectionId: {
 		type: mongoose.Schema.Types.ObjectId,
@@ -13,4 +14,4 @@ const produitSchema = new mongoose.Schema({
 	},
 });
 
-module.exports = mongoose.model("Produit", produitSchema);
+export default mongoose.model("Produit", produitSchema);

@@ -5,4 +5,4 @@ const codePromoSchema = new mongoose.Schema({
 	dateExpiration: { type: Date, required: true },
 });
 
-module.exports = mongoose.model("CodePromo", codePromoSchema);
+export default mongoose.model("CodePromo", codePromoSchema);
