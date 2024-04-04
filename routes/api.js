@@ -10,6 +10,7 @@ import tryCatch from "../utils/tryCatch.js";
 import Client from "../models/client.js";
 import Collection from "../models/collection.js";
 import Produit from "../models/produit.js";
+import Commande from "../models/commande.js";
 
 const api = express.Router();
 
@@ -122,6 +123,16 @@ api.get(
 			.skip(parseInt(skip));
 
 		return res.status(200).json({ produits });
+	})
+);
+
+api.get(
+	"/commandes",
+	auth,
+	tryCatch(async (req, res) => {
+		const commandes = await Commande.find({ clientId: req.auth.userId });
+
+		return res.status(200).json(commandes);
 	})
 );
 

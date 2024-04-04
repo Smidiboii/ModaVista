@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
+import produitSchema from "./produit.js";
 
 const commandeSchema = new mongoose.Schema({
-	produits: { type: [produitSchema], required: true, default: [] },
+	produits: { type: [produitSchema.schema], required: true, default: [] },
 	clientId: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: "Client",

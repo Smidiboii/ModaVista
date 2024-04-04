@@ -3,7 +3,9 @@ import Client from "./models/client.js";
 import CodePromo from "./models/codePromo.js";
 import Collection from "./models/collection.js";
 import Produit from "./models/produit.js";
+import Commande from "./models/commande.js";
 import "dotenv/config";
+import bcrypt from "bcrypt";
 
 (async () => {
 	const db = mongoose.connection;
@@ -24,12 +26,15 @@ import "dotenv/config";
 
 	console.log("Seeding...");
 
-	await Client.create([
+	const salt = bcrypt.genSaltSync(parseInt(process.env.BCRYPT_ROUNDS));
+	const mdpHash = await bcrypt.hash("password123", salt);
+
+	const client = await Client.create([
 		{
 			prenom: "John",
 			nom: "Doe",
 			email: "john@example.com",
-			mdpHash: "password123",
+			mdpHash,
 		},
 	]);
 
@@ -63,6 +68,31 @@ import "dotenv/config";
 			collectionId: collectionChaussure._id,
 		},
 	]);
+
+	await Commande.create({
+		clientId: client[0]._id,
+		etat: "EN COURS",
+		produits: [
+			{
+				nom: "Chemise décontractée",
+				description: "Chemise en coton confortable à porter au quotidien.",
+				marque: "XYZ Brand",
+				taille: "M",
+				genre: "H",
+				prix: 29.99,
+				collectionId: collectionChandail._id,
+			},
+			{
+				nom: "Chaussures de course",
+				description: "Chaussures légères avec une excellente traction pour la course.",
+				marque: "ABC Sportswear",
+				taille: "L",
+				genre: "F",
+				prix: 59.99,
+				collectionId: collectionChaussure._id,
+			},
+		],
+	});
 
 	// close
 	await mongoose.disconnect();
