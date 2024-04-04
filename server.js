@@ -2,6 +2,7 @@ import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
 import mongoose from "mongoose";
+import errorHandler from "./middleware/errorHandler.js";
 
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
@@ -50,6 +51,8 @@ app.all("*", (req, res, next) => {
 	res.render("pages/404");
 	next();
 });
+
+app.use(errorHandler);
 
 // expose assets
 app.listen(3000, function () {
