@@ -6,7 +6,7 @@ import "dotenv/config";
 
 const api = express.Router();
 
-api.post("/login", async (req, res) => {
+api.post("/signup", async (req, res) => {
 	const { prenom, nom, email, mdp } = req.body;
 
 	if (!prenom || !nom || !email || !mdp) {
@@ -39,6 +39,30 @@ api.post("/login", async (req, res) => {
 	});
 
 	return res.status(200).json({ message: "Votre compte a été créé avec succès" });
+});
+
+api.post("/login", async (req, res) => {
+	const INVALID_LOGIN = "Adresse email ou mot de passe incorrect";
+
+	const { email, mdp } = req.body;
+
+	if (!email || !mdp) {
+		return res.status(400).json({ message: "Champs manquants" });
+	}
+
+	const client = await Client.findOne({ email });
+
+	if (!client) {
+		return res.status(400).json({ message: INVALID_LOGIN });
+	}
+
+	const isPasswordValid = await bcrypt.compare(mdp, client.mdpHash);
+
+	if (!isPasswordValid) {
+		return res.status(400).json({ message: INVALID_LOGIN });
+	}
+
+	return res.status(200).json({ message: "Vous êtes connecté" });
 });
 
 export default api;
