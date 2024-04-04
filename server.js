@@ -3,6 +3,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import mongoose from "mongoose";
 import errorHandler from "./middleware/errorHandler.js";
+import pages from "./routes/pages.js";
 
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
@@ -38,13 +39,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/assets", express.static(path.join(__dirname, "views", "assets")));
 
-app.get("/", function (req, res) {
-	res.render("pages/index");
-});
-
-app.get("/lol", function (req, res) {
-	res.render("pages/index");
-});
+app.use("/", pages);
 
 // 404 error
 app.all("*", (req, res, next) => {
