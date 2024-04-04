@@ -3,6 +3,7 @@ import { validateEmail } from "../utils/utils.js";
 import Client from "../models/client.js";
 import bcrypt from "bcrypt";
 import "dotenv/config";
+import jwt from "jsonwebtoken";
 
 const api = express.Router();
 
@@ -62,7 +63,9 @@ api.post("/login", async (req, res) => {
 		return res.status(400).json({ message: INVALID_LOGIN });
 	}
 
-	return res.status(200).json({ message: "Vous êtes connecté" });
+	const token = jwt.sign({ userId: client._id }, process.env.JWT_SECRET_TOKEN);
+
+	return res.status(200).json({ message: "Vous êtes connecté", token });
 });
 
 export default api;
