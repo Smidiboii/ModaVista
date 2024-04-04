@@ -7,6 +7,10 @@ const validateEmail = (email) => {
 };
 
 const extractCookie = (cookieName, cookies) => {
+	if (!cookies) {
+		return null;
+	}
+
 	const cookiesSplit = cookies.split(";");
 	let cookieValue = null;
 

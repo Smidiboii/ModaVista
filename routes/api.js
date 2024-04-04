@@ -90,15 +90,6 @@ api.get(
 );
 
 api.get(
-	"/collections",
-	tryCatch(async (req, res) => {
-		const collections = await Collection.find();
-
-		return res.status(200).json(collections);
-	})
-);
-
-api.get(
 	"/collections/:collectionId",
 	tryCatch(async (req, res) => {
 		const { collectionId } = req.params;

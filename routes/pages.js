@@ -1,5 +1,6 @@
 import express from "express";
 import fetchData from "../middleware/fetchData.js";
+import Produit from "../models/produit.js";
 
 const pages = express.Router();
 
@@ -27,6 +28,20 @@ pages.get("/", (req, res) => {
 
 pages.get("/register", onlyGuest, (req, res) => {
 	res.render("pages/register", req.sharedData);
+});
+
+pages.get("/category/:gender/:collectionId", async (req, res) => {
+	let { gender, collectionId } = req.params;
+
+	if (!["H", "F"].includes(gender)) {
+		return res.status(404).render("pages/404", req.sharedData);
+	}
+
+	const produits = await Produit.find({
+		collectionId,
+	});
+
+	res.render("pages/category", { ...req.sharedData, produits, gender });
 });
 
 pages.use("*", (req, res, next) => {
