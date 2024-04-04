@@ -12,10 +12,14 @@ _________________________________________________________
 				</div>
 				<div class="col-lg-6 text-center text-lg-right">
 					<ul class="menu list-inline mb-0">
+						<% if (!isLogged) { %>
 						<li class="list-inline-item">
 							<a href="#" data-toggle="modal" data-target="#login-modal">Se connecter</a>
 						</li>
 						<li class="list-inline-item"><a href="register">Se créer un compte</a></li>
+						<% } else { %>
+						<li class="list-inline-item"><a href="account">Mon compte</a></li>
+						<% } %>
 					</ul>
 				</div>
 			</div>

@@ -6,4 +6,20 @@ const validateEmail = (email) => {
 		);
 };
 
-export { validateEmail };
+const extractCookie = (cookieName, cookies) => {
+	const cookiesSplit = cookies.split(";");
+	let cookieValue = null;
+
+	cookiesSplit.forEach((cookie) => {
+		const cookiePair = cookie.split("=");
+		const curCookieName = cookiePair[0].trim();
+		if (curCookieName === cookieName) {
+			cookieValue = cookiePair[1];
+			return;
+		}
+	});
+
+	return cookieValue;
+};
+
+export { validateEmail, extractCookie };
