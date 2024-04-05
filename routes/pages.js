@@ -13,7 +13,7 @@ const onlyAuthUser = (req, res, next) => {
 	if (req.sharedData.isLogged) {
 		next();
 	} else {
-		res.redirect("/login");
+		res.redirect("/register");
 	}
 };
 
