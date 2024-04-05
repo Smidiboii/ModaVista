@@ -1,5 +1,4 @@
 import express from "express";
-import mongoose from "mongoose";
 import { validateEmail } from "../utils/utils.js";
 import bcrypt from "bcrypt";
 import "dotenv/config";
@@ -8,9 +7,6 @@ import auth from "../middleware/auth.js";
 import tryCatch from "../utils/tryCatch.js";
 
 import Client from "../models/client.js";
-import Collection from "../models/collection.js";
-import Produit from "../models/produit.js";
-import Commande from "../models/commande.js";
 
 const api = express.Router();
 
@@ -86,44 +82,6 @@ api.get(
 	auth,
 	tryCatch(async (req, res) => {
 		return res.status(200).json({ message: "Auth successful", userId: req.auth.userId });
-	})
-);
-
-api.get(
-	"/collections/:collectionId",
-	tryCatch(async (req, res) => {
-		const { collectionId } = req.params;
-		const { limit, skip } = req.query;
-
-		// check if id is valid with mongoose
-		if (!mongoose.Types.ObjectId.isValid(collectionId)) {
-			return res.status(400).json({ message: "Invalid collection id" });
-		}
-
-		const collection = await Collection.findById(collectionId);
-
-		if (!collection) {
-			return res.status(404).json({ message: "Collection not found" });
-		}
-
-		// find produits from collectio
-		const produits = await Produit.find({
-			collectionId: collection._id,
-		})
-			.limit(parseInt(limit))
-			.skip(parseInt(skip));
-
-		return res.status(200).json({ produits });
-	})
-);
-
-api.get(
-	"/commandes",
-	auth,
-	tryCatch(async (req, res) => {
-		const commandes = await Commande.find({ clientId: req.auth.userId });
-
-		return res.status(200).json(commandes);
 	})
 );
 

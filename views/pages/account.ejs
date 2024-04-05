@@ -53,60 +53,26 @@
 									<table class="table table-hover">
 										<thead>
 											<tr>
-												<th>Order</th>
+												<th>Order Id</th>
 												<th>Date</th>
 												<th>Total</th>
 												<th>Status</th>
-												<th>Action</th>
 											</tr>
 										</thead>
 										<tbody>
+											<% commandes.forEach(function (commande) { %>
 											<tr>
-												<th># 1735</th>
-												<td>22/06/2013</td>
-												<td>$ 150.00</td>
-												<td><span class="badge badge-info">Being prepared</span></td>
-												<td>
-													<a href="customer-order.html" class="btn btn-primary btn-sm">View</a>
-												</td>
+												<th><%= commande._id.toString().slice(0, 8) + '...' %></th>
+												<td><%= commande.orderDate.toLocaleDateString('en-CA') %></td>
+												<td>$ <%= calculateTotalPrice(commande.produits) %></td>
+												<td><span class="badge badge-info"><%= commande.etat %></span></td>
 											</tr>
-											<tr>
-												<th># 1735</th>
-												<td>22/06/2013</td>
-												<td>$ 150.00</td>
-												<td><span class="badge badge-info">Being prepared</span></td>
-												<td>
-													<a href="customer-order.html" class="btn btn-primary btn-sm">View</a>
-												</td>
-											</tr>
-											<tr>
-												<th># 1735</th>
-												<td>22/06/2013</td>
-												<td>$ 150.00</td>
-												<td><span class="badge badge-success">Received</span></td>
-												<td>
-													<a href="customer-order.html" class="btn btn-primary btn-sm">View</a>
-												</td>
-											</tr>
-											<tr>
-												<th># 1735</th>
-												<td>22/06/2013</td>
-												<td>$ 150.00</td>
-												<td><span class="badge badge-danger">Cancelled</span></td>
-												<td>
-													<a href="customer-order.html" class="btn btn-primary btn-sm">View</a>
-												</td>
-											</tr>
-											<tr>
-												<th># 1735</th>
-												<td>22/06/2013</td>
-												<td>$ 150.00</td>
-												<td><span class="badge badge-warning">On hold</span></td>
-												<td>
-													<a href="customer-order.html" class="btn btn-primary btn-sm">View</a>
-												</td>
-											</tr>
+											<% }); %>
 										</tbody>
+
+										<% function calculateTotalPrice(produits) { %> <% var totalPrice = 0; %> <%
+										produits.forEach(function (produit) { %> <% totalPrice += produit.prix; %> <%
+										}); %> <%= totalPrice.toFixed(2) %> <% } %> This EJS code iterat
 									</table>
 								</div>
 							</div>
@@ -115,6 +81,7 @@
 				</div>
 			</div>
 		</div>
+
 		<%- include ("../partials/footer.ejs") %>
 
 		<!-- JavaScript files-->

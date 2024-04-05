@@ -1,7 +1,9 @@
 import express from "express";
 import fetchData from "../middleware/fetchData.js";
-import Produit from "../models/produit.js";
 import tryCatch from "../utils/tryCatch.js";
+
+import Produit from "../models/produit.js";
+import Commande from "../models/commande.js";
 
 const pages = express.Router();
 
@@ -69,12 +71,15 @@ pages.get(
 
 pages.get(
 	"/account",
+	onlyAuthUser,
 	tryCatch(async (req, res) => {
-		res.render("pages/account", req.sharedData);
+		const commandes = await Commande.find({ clientId: req.sharedData.userId });
+
+		res.render("pages/account", { ...req.sharedData, commandes });
 	})
 );
 
-pages.get("/logout", (req, res) => {
+pages.get("/logout", onlyAuthUser, (req, res) => {
 	res.clearCookie("token");
 	res.redirect("/");
 });
