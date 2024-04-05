@@ -79,6 +79,14 @@ pages.get(
 	})
 );
 
+pages.get(
+	"/cart",
+	onlyAuthUser,
+	tryCatch(async (req, res) => {
+		res.render("pages/cart", req.sharedData);
+	})
+);
+
 pages.get("/logout", onlyAuthUser, (req, res) => {
 	res.clearCookie("token");
 	res.redirect("/");
