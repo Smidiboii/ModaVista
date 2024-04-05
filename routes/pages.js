@@ -67,6 +67,18 @@ pages.get(
 	})
 );
 
+pages.get(
+	"/account",
+	tryCatch(async (req, res) => {
+		res.render("pages/account", req.sharedData);
+	})
+);
+
+pages.get("/logout", (req, res) => {
+	res.clearCookie("token");
+	res.redirect("/");
+});
+
 pages.use("*", (req, res, next) => {
 	res.status(404).render("pages/404", req.sharedData);
 });
