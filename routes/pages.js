@@ -25,8 +25,9 @@ const onlyGuest = (req, res, next) => {
 
 pages.get(
 	"/",
-	tryCatch((req, res) => {
-		res.render("pages/index", req.sharedData);
+	tryCatch(async (req, res) => {
+		const produits = await Produit.find().limit(4);
+		res.render("pages/index", { ...req.sharedData, produits });
 	})
 );
 
