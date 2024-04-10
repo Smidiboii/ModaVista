@@ -6,7 +6,7 @@ const __filename = fileURLToPath(
     import.meta.url);
 const __dirname = path.dirname(__filename);
 import mysql from "mysql";
-import { MongoClient } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 
 /*
     Configuration de EJS
@@ -70,46 +70,28 @@ app.get("/compte", function (req, res) {
 
 app.get("/collection/:id", async (req, res) => {
     let idFromParams = req.params.id;
-    console.log(idFromParams);
 
     try {
         const db = client.db('Modavista');
         const ListeProduits = db.collection('Produit');
         const produits = await ListeProduits.find({ 'CollectionID': { $eq: Number(idFromParams) } }).project({ 'Nom': 1, 'Prix': 1, 'ProduitID': 1 }).toArray();
-        const collections = await ObtenirCollections(idFromParams, res);
-        console.log(produits);
+        const collections = await db.collection('Collection').find({}).toArray();
+        var NomCollection = "";
+        for (let index = 0; index < collections.length; index++) {
+            if (collections[index].CollectionID == idFromParams) {
+                NomCollection = collections[index].NomCollection;
+                break;
+            }
+        }
 
-        MontrerCollection(produits, collections[0], collections[1], res, idFromParams);
+        MontrerCollection(produits, NomCollection, collections, res);
     } catch (err) {
         console.error('Erreur avec la consultation de la BD.', err);
 
     }
 })
 
-function ObtenirCollections(idFromParams, res) {
-    return new Promise((resolve, reject) => {
-        con.query('SELECT NomCollection, CollectionID FROM Collection', (errCollection, collections) => {
-            if (errCollection) {
-                console.error('Erreur avec la consultation de la BD.', errCollection);
-                res.status(500).send('Collections non trouvées.');
-                reject(errCollection);
-            } else {
-                var NomCollection = "";
-                for (let index = 0; index < collections.length; index++) {
-                    if (collections[index].CollectionID == idFromParams) {
-                        NomCollection = collections[index].NomCollection;
-                        break;
-                    }
-                }
-                var data = [NomCollection, collections];
-                resolve(data);
-            }
-        });
-    });
-}
-
-function MontrerCollection(ListeProduits, NomCollection, results, res, idFromParams) {
-    console.log(NomCollection);
+function MontrerCollection(ListeProduits, NomCollection, results, res) {
     var hrefFondDEcran = "assets/img/" + NomCollection + ".jpg";
     if (NomCollection == "Nos Produits") {
         hrefFondDEcran = "../" + hrefFondDEcran;
@@ -127,12 +109,13 @@ app.get("/checkout", function (req, res) {
     res.render("pages/checkout");
 })
 
-app.get("/produit/:id", function (req, res) {
-    const id = req.params.id;
-    con.query("SELECT * FROM Produit WHERE ProduitID = ?", [id], function (err, result) {
-        if (err) throw err;
-        res.render("pages/produit", { produit: result[0] });
-    });
+app.get("/produit/:id", async function (req, res) {
+    const ProduitID = req.params.id;
+    const db = client.db('Modavista');
+    const ListeProduits = db.collection('Produit');
+    const produit = await ListeProduits.find({ '_id': new ObjectId(ProduitID) }).toArray();
+    res.render("pages/produit", { produit: produit[0] });
+
 });
 
 app.get("/login", function (req, res) {
