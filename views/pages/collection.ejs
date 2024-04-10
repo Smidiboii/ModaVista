@@ -9,7 +9,7 @@
     <main>
         <div class="container py-4">
             <%- include ("../partials/header.ejs") %>
-                <div class="bg-image"
+                <div id="AffichageProduits" class="bg-image"
                     style="align-content: center; background-image: url('../<%=fondDEcran%>'); background-size: cover; background-repeat: no-repeat; text-align: justify;">
 
                     <br>
@@ -74,8 +74,10 @@
                         fetch(url)
                             .then(response => response.json())
                             .then(data => {
-                                window.location.href = "/collection/" + data.CollectionID;
-                            });
+                                console.log(data);
+                            }).catch(error => {
+                                console.log(error);
+                            })
                         // var CollectionID = document.getElementById("SelectionCollections").value;
                         // window.location.href = "/collection/" + CollectionID;
                     }
