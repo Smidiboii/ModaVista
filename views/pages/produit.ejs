@@ -9,10 +9,13 @@
     <main>
         <div class="container py-4">
             <%- include ("../partials/header.ejs") %>
+                <a href="/collection/<%= produit.CollectionID%>" class="btn btn-info">Retour à la collection</a>
+                <br>
+                <br>
                 <div class="row">
                     <div class="col-md-6">
                         <img src="/assets/img/IMG_<%= produit.Nom %>.jpg" alt="Image" class="img-fluid"
-                            style="width:100%;max-height: 400px;object-fit: cover;">
+                            style="width:100%;object-fit: cover;">
                     </div>
 
                     <div class="col-md-6">

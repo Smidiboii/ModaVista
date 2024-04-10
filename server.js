@@ -6,6 +6,7 @@ const __filename = fileURLToPath(
     import.meta.url);
 const __dirname = path.dirname(__filename);
 import mysql from "mysql";
+import { MongoClient, ObjectId } from "mongodb";
 
 /*
     Configuration de EJS
@@ -30,7 +31,22 @@ con.connect(function (err) {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+/*
+    Connection à MongoDB
+*/
+const uri = "mongodb+srv://scott:oracle@bdmodavista.welwlkh.mongodb.net/";
+const client = new MongoClient(uri);
 
+async function connectToMongoDB() {
+    try {
+        await client.connect();
+        console.log("Connected to MongoDB");
+    } catch (err) {
+        console.error('Erreur avec la consultation de la BD.', err);
+    }
+}
+
+connectToMongoDB();
 /*
     Description des routes
 */
@@ -52,56 +68,33 @@ app.get("/compte", function (req, res) {
     res.render("pages/compte");
 })
 
-app.get("/collection", function (req, res) {
-
-    con.query('SELECT NomCollection, CollectionID FROM Collection', (err, results) => {
-        if (err) {
-            console.error('Erreur avec la consultation de la BD.', err);
-            return res.status(500).send('Collections non trouvées.');
-        }
-        con.query('SELECT Nom, Prix, ProduitID FROM Produit', (err, produits) => {
-            MontrerCollection(produits, "Nos Produits", results, err, res);
-        });
-    });
-});
-
-app.get("/collection/:id", function (req, res) {
+app.get("/collection/:id", async (req, res) => {
     let idFromParams = req.params.id;
-    console.log(idFromParams);
 
-    con.query('SELECT NomCollection, CollectionID FROM Collection', (errCollection, collections) => {
-        if (errCollection) {
-            console.error('Erreur avec la consultation de la BD.', errCollection);
-            return res.status(500).send('Collections non trouvées.');
-        }
-
+    try {
+        const db = client.db('Modavista');
+        const ListeProduits = db.collection('Produit');
+        const produits = await ListeProduits.find({ 'CollectionID': { $eq: Number(idFromParams) } }).project({ 'Nom': 1, 'Prix': 1, 'ProduitID': 1 }).toArray();
+        const collections = await db.collection('Collection').find({}).toArray();
         var NomCollection = "";
         for (let index = 0; index < collections.length; index++) {
             if (collections[index].CollectionID == idFromParams) {
                 NomCollection = collections[index].NomCollection;
-
                 break;
             }
         }
 
-        con.query('SELECT Nom, Prix, ProduitID FROM Produit where CollectionID = ?', idFromParams, (errProduct, produits) => {
+        MontrerCollection(produits, NomCollection, collections, res);
+    } catch (err) {
+        console.error('Erreur avec la consultation de la BD.', err);
 
-            MontrerCollection(produits, NomCollection, collections, errProduct, res);
-        });
-    });
+    }
 })
 
-function MontrerCollection(ListeProduits, NomCollection, results, err, res) {
-    if (err) {
-        console.error('Erreur avec la consultation de la BD.', err);
-        return res.status(500).send('Collection non trouvée.');
-    }
+function MontrerCollection(ListeProduits, NomCollection, results, res) {
     var hrefFondDEcran = "assets/img/" + NomCollection + ".jpg";
     if (NomCollection == "Nos Produits") {
         hrefFondDEcran = "../" + hrefFondDEcran;
-    }
-    for (let index2 = 0; index2 < ListeProduits.length; index2++) {
-        console.log(ListeProduits[index2]);
     }
     res.render("pages/collection.ejs", {
         fondDEcran: "assets/img/" + NomCollection + ".jpg",
@@ -116,12 +109,13 @@ app.get("/checkout", function (req, res) {
     res.render("pages/checkout");
 })
 
-app.get("/produit/:id", function (req, res) {
-    const id = req.params.id;
-    con.query("SELECT * FROM Produit WHERE ProduitID = ?", [id], function (err, result) {
-        if (err) throw err;
-        res.render("pages/produit", { produit: result[0] });
-    });
+app.get("/produit/:id", async function (req, res) {
+    const ProduitID = req.params.id;
+    const db = client.db('Modavista');
+    const ListeProduits = db.collection('Produit');
+    const produit = await ListeProduits.find({ '_id': new ObjectId(ProduitID) }).toArray();
+    res.render("pages/produit", { produit: produit[0] });
+
 });
 
 app.get("/login", function (req, res) {
@@ -146,9 +140,9 @@ app.post("/login", function (req, res) {
     });
 });
 
-app.post("/signup", function(req, res) {
+app.post("/signup", function (req, res) {
     const { prenom, nom, email, mdp, tel, adresse } = req.body;
-    con.query("SELECT * FROM Client WHERE Email = ?", [email], function(err, result) {
+    con.query("SELECT * FROM Client WHERE Email = ?", [email], function (err, result) {
         if (err) {
             res.status(500).json({ message: "Erreur interne du serveur" });
             throw err;
@@ -156,7 +150,7 @@ app.post("/signup", function(req, res) {
         if (result.length > 0) {
             res.json({ message: "L'email existe déjà. Veuillez choisir un autre email." });
         } else {
-            con.query("INSERT INTO Client (Prenom, Nom, Email, Mdp, TelNum, Adresse) VALUES (?, ?, ?, ?, ?, ?)", [prenom, nom, email, mdp, tel, adresse], function(err, result) {
+            con.query("INSERT INTO Client (Prenom, Nom, Email, Mdp, TelNum, Adresse) VALUES (?, ?, ?, ?, ?, ?)", [prenom, nom, email, mdp, tel, adresse], function (err, result) {
                 if (err) {
                     res.status(500).json({ message: "Erreur interne du serveur" });
                     throw err;
