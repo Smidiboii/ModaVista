@@ -2,6 +2,7 @@ import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
 const app = express();
+const stripe = require('stripe')('your_stripe_secret_key');
 const __filename = fileURLToPath(
     import.meta.url);
 const __dirname = path.dirname(__filename);
