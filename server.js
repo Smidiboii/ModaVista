@@ -1,4 +1,4 @@
-import express from "express";
+import express, { json } from "express";
 import path from "path";
 import { fileURLToPath } from "url";
 const app = express();
@@ -67,7 +67,49 @@ app.get("/", function (req, res) {
 app.get("/compte", function (req, res) {
     res.render("pages/compte");
 })
+app.get('/api/collection', async (req, res) => {
+    let collectionID = req.query.id;
 
+    try {
+        const db = client.db('Modavista');
+        const ListeProduits = db.collection('Produit');
+        let produits = "";
+        const collections = await db.collection('Collection').find({}).toArray();
+        var NomCollection = "";
+        if (collectionID == undefined) {
+            produits = await ListeProduits
+                .find({})
+                .project({ 'Nom': 1, 'Prix': 1, 'ProduitID': 1, 'CollectionID': 1 })
+                .toArray();
+
+            NomCollection = "Nos Produits";
+        } else {
+            produits = await ListeProduits
+                .find({ 'CollectionID': { $eq: Number(collectionID) } })
+                .project({ 'Nom': 1, 'Prix': 1, 'ProduitID': 1, 'CollectionID': 1 })
+                .toArray();
+
+            for (let index = 0; index < collections.length; index++) {
+                if (collections[index].CollectionID == collectionID) {
+                    NomCollection = collections[index].NomCollection;
+                    break;
+                }
+            }
+        }
+
+        var hrefFondDEcran = "assets/img/" + NomCollection + ".jpg";
+        if (NomCollection == "Nos Produits") {
+            hrefFondDEcran = "../" + hrefFondDEcran;
+        }
+        var imgNonTrouvee = "assets/img/IMG_NONTROUVEE.jpg";
+        var data = { fondDEcran: hrefFondDEcran, produits: produits, NomCollection: NomCollection, imgNonTrouvee: imgNonTrouvee, collections: collections };
+        res.json(data);
+    } catch (err) {
+        console.error('Erreur avec la consultation de la BD.', err);
+
+    }
+
+});
 app.get("/collection/:id", async (req, res) => {
     let idFromParams = req.params.id;
 
