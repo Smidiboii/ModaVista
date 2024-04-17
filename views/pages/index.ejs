@@ -1,138 +1,93 @@
 <!DOCTYPE html>
 <html>
-	<%- include ("../partials/head.ejs") %>
-	<body>
-		<!-- navbar-->
-		<%- include ("../partials/navbar.ejs") %>
-		<div id="all">
-			<div id="content">
-				<div class="container">
-					<div class="row">
-						<div class="col-md-12">
-							<div id="main-slider" class="owl-carousel owl-theme">
-								<div class="item">
-									<img src="/assets/img/hero1.png" alt="" class="img-fluid" />
-								</div>
-							</div>
-							<!-- /#main-slider-->
-						</div>
-					</div>
-				</div>
-				<!--
-        *** ADVANTAGES HOMEPAGE ***
-        _________________________________________________________
-        -->
-				<div id="advantages">
-					<div class="container">
-						<div class="row mb-4">
-							<div class="col-md-4">
-								<div class="box clickable d-flex flex-column justify-content-center mb-0 h-100">
-									<div class="icon"><i class="fa fa-heart"></i></div>
-									<h3><a href="#">Nous aimons nos clients </a></h3>
-									<p class="mb-0">Nous sommes connus pour fournir le meilleur service possible</p>
-								</div>
-							</div>
-							<div class="col-md-4">
-								<div class="box clickable d-flex flex-column justify-content-center mb-0 h-100">
-									<div class="icon"><i class="fa fa-tags"></i></div>
-									<h3><a href="#">Meilleurs prix</a></h3>
-									<p class="mb-0">
-										Vous pouvez vérifier que la hauteur des cases s'ajuste lorsque du texte plus
-										long comme celui-ci est utilisé dans l’un d’eux.
-									</p>
-								</div>
-							</div>
-							<div class="col-md-4">
-								<div class="box clickable d-flex flex-column justify-content-center mb-0 h-100">
-									<div class="icon"><i class="fa fa-thumbs-up"></i></div>
-									<h3><a href="#">100% satisfaction garantie </a></h3>
-									<p class="mb-0">Retours gratuits sur tout pendant 3 mois.</p>
-								</div>
-							</div>
-						</div>
-						<!-- /.row-->
-					</div>
-					<!-- /.container-->
-				</div>
-				<!-- /#advantages-->
-				<!-- *** ADVANTAGES END ***-->
-				<!--
-        *** HOT PRODUCT SLIDESHOW ***
-        _________________________________________________________
-        -->
-				<div id="hot">
-					<div class="box py-4">
-						<div class="container">
-							<div class="row">
-								<div class="col-md-12">
-									<h2 class="mb-0">Chaud cette semaine</h2>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="container">
-						<div class="product-slider owl-carousel owl-theme">
-							<% produits.forEach(function(product) { %>
-							<div class="item">
-								<div class="product">
-									<a href="/product/<%= product._id %>"
-										><img src="/assets/img/<%= product.nom %>.jpg" alt="" class="img-fluid"
-									/></a>
-									<div class="text">
-										<h3><a href="/product/<%= product._id %>"><%= product.description %></a></h3>
-										<p class="price"><del></del>$<%= product.prix %></p>
-									</div>
-									<!-- /.text-->
-									<div class="ribbon sale">
-										<div class="theribbon">SALE</div>
-										<div class="ribbon-background"></div>
-									</div>
-								</div>
-								<!-- /.product-->
-							</div>
-							<% }); %>
-							<!-- /.product-slider-->
-						</div>
-						<!-- /.container-->
-					</div>
-					<!-- /#hot-->
-					<!-- *** HOT END ***-->
-				</div>
-				<!--
-        *** GET INSPIRED ***
-        _________________________________________________________
-        -->
-				<div class="container">
-					<div class="col-md-12">
-						<div class="box slideshow">
-							<h3>Soyez inspiré</h3>
-							<p class="lead">Inspirez-vous de nos designers de classe mondiale</p>
-							<div id="get-inspired" class="owl-carousel owl-theme">
-								<div class="item">
-									<a href="#"
-										><img src="/assets/img/getinspired1.jpg" alt="Get inspired" class="img-fluid"
-									/></a>
-								</div>
-								<div class="item">
-									<a href="#"
-										><img src="/assets/img/getinspired2.jpg" alt="Get inspired" class="img-fluid"
-									/></a>
-								</div>
-								<div class="item">
-									<a href="#"
-										><img src="/assets/img/getinspired3.jpg" alt="Get inspired" class="img-fluid"
-									/></a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- *** GET INSPIRED END ***-->
-			</div>
-		</div>
-		<%- include ("../partials/footer.ejs") %>
+<%- include ("../partials/head.ejs") %>
 
-		<!-- JavaScript files-->
-		<%- include ("../partials/javascript.ejs") %>
-	</body>
+    <body>
+        <%- include ("../partials/navbar.ejs") %>
+            <div id="all">
+                <div id="content">
+                    <div class="container mb-3">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <img src="/assets/img/bald-girl.png" class="card-img-top" alt="Image 1">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Moda 89c</h5>
+                                        <a href="/collection" class="btn btn-primary">EXPLORE THE COLLECTION</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <img src="/assets/img/mode-woman.png" class="card-img-top" alt="Image 2">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Chemises</h5>
+                                        <a href="/collection" class="btn btn-primary">EXPLORE THE COLLECTION</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div id="hot">
+                        <div class="box py-4">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h2 class="mb-0">Chaud cette semaine</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container">
+                            <div class="product-slider owl-carousel owl-theme">
+                                <% produits.forEach(function(product) { %>
+                                    <div class="item">
+                                        <div class="product">
+                                            <a href="/product/<%= product._id %>"><img src="/assets/img/<%= product.nom %>.jpg" alt="" class="img-fluid"
+									/></a>
+                                            <div class="text">
+                                                <h3>
+                                                    <a href="/product/<%= product._id %>">
+                                                        <%= product.description %>
+                                                    </a>
+                                                </h3>
+                                                <p class="price"><del></del>$
+                                                    <%= product.prix %>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <% }); %>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="container">
+                        <div class="col-md-12">
+                            <div class="box slideshow">
+                                <h3>Soyez inspiré</h3>
+                                <p class="lead">Inspirez-vous de nos designers de classe mondiale</p>
+                                <div id="get-inspired" class="owl-carousel owl-theme">
+                                    <div class="item">
+                                        <a href="#"><img src="/assets/img/getinspired1s.jpg" alt="Get inspired" class="img-fluid" /></a>
+                                    </div>
+                                    <div class="item">
+                                        <a href="#"><img src="/assets/img/getinspired2s.jpg" alt="Get inspired" class="img-fluid" /></a>
+                                    </div>
+                                    <div class="item">
+                                        <a href="#"><img src="/assets/img/getinspired3s.jpg" alt="Get inspired" class="img-fluid" /></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <%- include ("../partials/footer.ejs") %>
+                <%- include ("../partials/javascript.ejs") %>
+    </body>
+
 </html>
