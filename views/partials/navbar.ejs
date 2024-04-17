@@ -146,9 +146,7 @@ _________________________________________________________
 </header>
 
 <script>
-    const form = document.getElementById("login-form");
-
-    form.addEventListener("submit", async(e) => {
+    document.getElementById("login-form").addEventListener("submit", async(e) => {
         e.preventDefault();
 
         const email = document.getElementById("email-modal").value;
