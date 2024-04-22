@@ -1,14 +1,23 @@
 import express from "express";
 import path from "path";
+import stripe from 'stripe';
+import 'dotenv/config';
 import { fileURLToPath } from "url";
 const app = express();
-const stripe = require('stripe')('your_stripe_secret_key');
 const __filename = fileURLToPath(
     import.meta.url);
 const __dirname = path.dirname(__filename);
 import mysql from "mysql";
 import { MongoClient, ObjectId } from "mongodb";
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
 
+if (!stripeSecretKey) {
+    throw new Error('Stripe secret key not found in environment variables.');
+}
+const stripeInstance = stripe(stripeSecretKey);
+import * as cardValidator from 'card-validator';
+import validator from 'validator';
+const { validateCardNumber, validateCvv } = cardValidator;
 /*
     Configuration de EJS
 */
@@ -127,6 +136,9 @@ app.get("/signup", function (req, res) {
     res.render("pages/signup");
 });
 
+app.get("/payment", function (req, res) {
+    res.render("pages/payment");
+});
 
 app.post("/login", function (req, res) {
     const { email, password } = req.body;
@@ -161,6 +173,41 @@ app.post("/signup", function (req, res) {
             });
         }
     });
+});
+
+
+app.post("/payment", async (req, res) => {
+    try {
+        const { cardNumber, expiryDate, cvv } = req.body;
+        const cardNumberValid = validator.isCreditCard(cardNumber);
+        const cvvValid = validator.isLength(cvv, { min: 3, max: 4 });
+
+        if (!cardNumberValid) {
+            return res.status(400).json({ error: 'Invalid card number' });
+        }
+        
+        if (!cvvValid) {
+            return res.status(400).json({ error: 'Invalid CVV' });
+        }
+        const paymentIntent = await stripeInstance.paymentIntents.create({
+            amount: 6500, 
+            currency: 'usd',
+            payment_method_data: {
+                type: 'card',
+                card: {
+                    number: cardNumber,
+                    exp_month: expiryDate.split('/')[0],
+                    exp_year: expiryDate.split('/')[1],
+                    cvc: cvv,
+                },
+            },
+        });
+
+        res.json({ clientSecret: paymentIntent.client_secret });
+    } catch (error) {
+        console.error('Error processing payment:', error);
+        res.status(500).json({ error: 'Error processing payment.' });
+    }
 });
 
 app.listen(3000, function () {
