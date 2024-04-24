@@ -47,7 +47,6 @@ api.post(
 		return res.status(200).json({ message: "Votre compte a été créé avec succès" });
 	})
 );
-
 api.post(
 	"/login",
 	tryCatch(async (req, res) => {

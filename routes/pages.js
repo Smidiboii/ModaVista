@@ -4,8 +4,27 @@ import tryCatch from "../utils/tryCatch.js";
 
 import Produit from "../models/produit.js";
 import Commande from "../models/commande.js";
+import { MongoClient } from "mongodb";
 
 const pages = express.Router();
+
+/*
+	Connection à MongoDB
+*/
+const uri = "mongodb+srv://scott:oracle@bdmodavista.welwlkh.mongodb.net/";
+const client = new MongoClient(uri);
+
+async function connectToMongoDB() {
+	try {
+		await client.connect();
+	} catch (err) {
+		console.error('Erreur avec la consultation de la BD.', err);
+	}
+}
+
+connectToMongoDB();
+
+const db = client.db('Modavista');
 
 pages.use(fetchData);
 
@@ -83,6 +102,8 @@ pages.get(
 	"/cart",
 	onlyAuthUser,
 	tryCatch(async (req, res) => {
+
+
 		res.render("pages/cart", req.sharedData);
 	})
 );
@@ -92,6 +113,15 @@ pages.get("/logout", onlyAuthUser, (req, res) => {
 	res.redirect("/");
 });
 
+pages.get("/NousTrouver", tryCatch(async (req, res) => {
+	res.render("pages/NousTrouver", req.sharedData);
+})
+);
+pages.get("/api/NousTrouver", async (req, res) => {
+	const db = client.db('Modavista');
+	const emplacements = await db.collection('emplacements').find({}).toArray();
+	res.json(emplacements);
+});
 pages.use("*", (req, res, next) => {
 	res.status(404).render("pages/404", req.sharedData);
 });
