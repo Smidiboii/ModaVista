@@ -47,7 +47,6 @@ api.post(
 		return res.status(200).json({ message: "Votre compte a été créé avec succès" });
 	})
 );
-
 api.post(
 	"/login",
 	tryCatch(async (req, res) => {
@@ -84,5 +83,26 @@ api.get(
 		return res.status(200).json({ message: "Auth successful", userId: req.auth.userId });
 	})
 );
+
+api.post(
+	"/cart", auth,
+	tryCatch(async (req, res) => {
+		const INVALID_BODY = 'Les champs sont invalides'
+		const userId = req.auth.userId;
+		const { produitsID } = req.body;
+
+		if (!produitsID || !produitsID instanceof Array)
+		{
+			return res.status(400).json({ message: "Champs manquants" });
+		}
+
+		const client = await Client.findById(userId);
+
+		client.cart = [...client.cart, ...produitsID]
+		client.save()
+
+		return res.status(200).json({ message: "Ajouté au panier", produitsID });
+	})
+)
 
 export default api;
