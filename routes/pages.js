@@ -92,8 +92,6 @@ pages.get("/logout", onlyAuthUser, (req, res) => {
 	res.redirect("/");
 });
 
-pages.use("*", (req, res, next) => {
-	res.status(404).render("pages/404", req.sharedData);
-});
+
 
 export default pages;

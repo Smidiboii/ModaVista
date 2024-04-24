@@ -2,6 +2,7 @@ import express from "express";
 import { validateEmail } from "../utils/utils.js";
 import bcrypt from "bcrypt";
 import "dotenv/config";
+import Stripe from "stripe";
 import jwt from "jsonwebtoken";
 import auth from "../middleware/auth.js";
 import tryCatch from "../utils/tryCatch.js";
@@ -9,6 +10,8 @@ import tryCatch from "../utils/tryCatch.js";
 import Client from "../models/client.js";
 
 const api = express.Router();
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
 
 api.post(
 	"/signup",
@@ -84,5 +87,7 @@ api.get(
 		return res.status(200).json({ message: "Auth successful", userId: req.auth.userId });
 	})
 );
+
+
 
 export default api;
