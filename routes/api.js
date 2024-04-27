@@ -24,7 +24,7 @@ api.post(
 		}
 
 		if (mdp.length < 8) {
-			return res.status(400).json({ message: "Mot de passe trop court" });
+			return res.status(400).json({ message: "Mot de passe trop court (8 caracteres min)" });
 		}
 
 		const emailExists = await Client.exists({ email });
