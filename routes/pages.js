@@ -5,6 +5,7 @@ import tryCatch from "../utils/tryCatch.js";
 import Produit from "../models/produit.js";
 import Commande from "../models/commande.js";
 import { MongoClient } from "mongodb";
+import Client from "../models/client.js";
 
 const pages = express.Router();
 
@@ -100,21 +101,28 @@ pages.get(
 	})
 );
 
+
 pages.get(
 	"/cart",
 	onlyAuthUser,
 	tryCatch(async (req, res) => {
+		const client = await Client.findById(req.sharedData.userId).populate('cart.produitId');
 
+		const cartContent = client.cart;
+		let produits =[] ;
 
-		res.render("pages/cart", req.sharedData);
+		for(let i =0; i<cartContent.length;i++){
+
+			produits.push(await Produit.findById(cartContent[i]))
+		}
+		res.render("pages/cart", { ...req.sharedData, cartContent , produits});
 	})
 );
 
-pages.get("/logout", onlyAuthUser, (req, res) => {
-	res.clearCookie("token");
-	res.redirect("/");
-});
 
+pages.get("/api/userCart", async (req, res) =>{
+
+});
 pages.get("/NousTrouver", tryCatch(async (req, res) => {
 	res.render("pages/NousTrouver", req.sharedData);
 })
