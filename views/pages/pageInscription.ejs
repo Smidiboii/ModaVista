@@ -1,0 +1,40 @@
+<%- include ("../partials/header.ejs") %>
+
+<style>
+    input{
+        width: 350;
+    }
+    .emailInput{
+        width: 706;
+    }
+    .espace{
+        margin-right: 150px;
+    }
+    .espace1{
+        margin-left: 130px;
+    }
+</style>
+
+
+<center class="PI-center">Inscription</center> </br>
+<center>
+<div>
+    <form id="inscriptionForm" action="/pageInscription" method="POST">
+        <span class="espace">Prenom</span> <span class="espace1">Nom</span> </br>
+    <input type="text" name="Prenom" id="prenomInput" placeholder="Entrez votre Prenom" > 
+    <input type="text" name="Nom" id="nomInput" placeholder="Entrez votre Nom" > </br>
+    Email </br>
+    <input class="emailInput" type="email" name="Email" id="emailInput" placeholder="Entrez votre Email" ></br>
+    Adresse</br>
+    <input type="text" name="Adresse" id="adresseInput" placeholder="Entrer votre Adresse"></br>
+    Numéros de teléphone</br>
+    <input type="tel" name="NumreosDeTelephone" id="telInput" placeholder="Entrer votre Numéros de teléphone"></br>
+    Mots de passes</br>
+    <input type="password" name="Mdp" id="mdpInput" placeholder="Entrer votre Mdp"></br></br>
+    <button type="submit">Terminer Inscription</button>
+    </form>
+</div>
+</center>
+
+
+<%- include ("../partials/footer.ejs") %>
