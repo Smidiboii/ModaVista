@@ -6,24 +6,19 @@
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwJtkUI1WynbgKMc6HsRZa6lXMxoMluG8&callback=console.debug&libraries=maps,marker&v=beta">
         </script>
 
-    <body onload="AfficherButtons(), afficherCarte()">
+    <body onload="AfficherButtons(), afficherCarte(4)">
         <%- include ("../partials/navbar.ejs") %>
             <div id="all">
                 <div id="content">
-                    <div id="contenantButtons" class="d-flex text-center btn-group">
+                    <div id="contenantButtons" class="d-flex text-center btn-group" style="height: 10%;">
                     </div>
                     <main>
-                        <div id="contenantCarte" class="col-lg-11 d-flex flex-row text-center justify-content-center"
+                        <div class="col-lg-11 d-flex flex-row text-center justify-content-center"
                             style="margin: 6%; height: 50%;">
+                            <div class="col-lg-6  justify-content-center" id="contenantCarte">
+                            </div>
+                            <div class="" id="descriptionCarte"></div>
 
-                            <gmp-map center="45.4924201965332,-73.58061218261719" zoom="14" map-id="Map_Modavista">
-                                <gmp-advanced-marker position="45.4924201965332,-73.58061218261719"
-                                    title="EndroitModavista"></gmp-advanced-marker>
-                            </gmp-map>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt fugiat impedit
-                                consequuntur reprehenderit? Officiis ducimus nam quas suscipit autem distinctio,
-                                iste
-                                consectetur eaque quod quibusdam itaque velit at dolorem veniam!</p>
                         </div>
 
                     </main>
@@ -55,9 +50,24 @@
         function afficherCarte(indexCarte) {
             let url = "http://localhost:3000/api/NousTrouver";
             var carte = document.getElementById("contenantCarte");
+            var description = document.getElementById("descriptionCarte");
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
+                    console.log(data[indexCarte].coordonées.toString());
+                    carte.innerHTML = `
+                    <gmp-map center=${data[indexCarte].coordonées.toString()} zoom="14" map-id="Map_Modavista">
+                                <gmp-advanced-marker position=${data[indexCarte].coordonées.toString()}
+                                    title="EndroitModavista"></gmp-advanced-marker>
+                            </gmp-map>
+                    `;
+                    description.innerHTML = `
+                    <h2>${data[indexCarte].pays.toString()}</h2>
+                    <ul class="list-group">
+                        <li class="list-group-item">${data[indexCarte].ville.toString()}</li>
+                        <li class="list-group-item">${data[indexCarte].adresse.toString()}</li>
+                        <li class="list-group-item">${data[indexCarte].téléphone.toString()}</li>
+                    </ul>`;
 
                 }).catch(error => {
                     console.log(error);

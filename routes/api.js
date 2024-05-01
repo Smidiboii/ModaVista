@@ -48,6 +48,28 @@ api.post(
 	})
 );
 api.post(
+	"/account",
+	tryCatch(async (req, res) => {
+		const { id, prenom, nom, email } = req.body;
+
+		if (!prenom || !nom || !email) {
+			return res.status(400).json({ message: "Champs manquants" });
+		}
+
+		if (!validateEmail(email)) {
+			return res.status(400).json({ message: "Adresse email est invalide" });
+		}
+		console.log(id, prenom, nom, email);
+		await Client.findByIdAndUpdate(id, {
+			'prenom': prenom,
+			'nom': nom,
+			'email': email
+		});
+
+		return res.status(200).json({ message: "Votre compte a été créé avec succès" });
+	})
+);
+api.post(
 	"/login",
 	tryCatch(async (req, res) => {
 		const INVALID_LOGIN = "Adresse email ou mot de passe incorrect";

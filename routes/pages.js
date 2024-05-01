@@ -5,6 +5,7 @@ import tryCatch from "../utils/tryCatch.js";
 import Produit from "../models/produit.js";
 import Commande from "../models/commande.js";
 import { MongoClient } from "mongodb";
+import { ObjectId } from 'mongodb';
 
 const pages = express.Router();
 
@@ -94,7 +95,11 @@ pages.get(
 	tryCatch(async (req, res) => {
 		const commandes = await Commande.find({ clientId: req.sharedData.userId });
 
-		res.render("pages/account", { ...req.sharedData, commandes });
+		let donneesClient = await db.collection('clients')
+			.find({ '_id': new ObjectId(req.sharedData.userId) })
+			.project({ 'prenom': 1, 'nom': 1, 'email': 1 }).toArray();
+
+		res.render("pages/account", { ...req.sharedData, commandes, clientId: req.sharedData.userId, donneesClient: donneesClient[0] });
 	})
 );
 
