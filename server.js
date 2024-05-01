@@ -91,11 +91,16 @@ app.post('/cart', async (req, res) => {
         shipping_address_collection: {
             allowed_countries: ['US','CA'],
         },
+        invoice_creation: {
+            enabled: true,
+        },
+        customer_email: email, 
         allow_promotion_codes: true,
         success_url: `${process.env.BASE_URL}/complete?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${process.env.BASE_URL}/cancel`
     });
     res.redirect(session.url);
+    
 });
 
 
