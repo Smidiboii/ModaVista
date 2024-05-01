@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<%- include ("../partials/head.ejs") %>
+
+    <body>
+        <%- include ("../partials/navbar.ejs") %>
+            <div id="all">
+                <div id="content">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <img src="/assets/img/bald-girl.png" class="card-img-top" alt="Image 1">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Moda 89c</h5>
+                                        <a href="/collection" class="btn btn-primary">EXPLORE THE COLLECTION</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <img src="/assets/img/mode-woman.png" class="card-img-top" alt="Image 2">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Chemises</h5>
+                                        <a href="/collection" class="btn btn-primary">EXPLORE THE COLLECTION</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center py-5">
+                        <h2 class="mb-3">Saint-Valentin</h2>
+                        <a href="/collection/3" class="btn btn-dark">EXPLOREZ LA COLLECTION</a>
+                    </div>
+
+                    <div class="mb-3">
+                        <img src="/assets/img/black-woman.png" alt="woman" class="d-block m-auto img-fluid" />
+                    </div>
+
+
+                    <div id="hot">
+                        <div class="box py-4">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h2 class="mb-0">Chaud cette semaine</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container">
+                            <div class="product-slider owl-carousel owl-theme">
+                                <% produits.forEach(function(product) { %>
+                                    <div class="item">
+                                        <div class="product">
+                                            <a href="/product/<%= product._id %>"><img src="/assets/img/<%= product.nom %>.jpg" alt="" class="img-fluid"
+									/></a>
+                                            <div class="text">
+                                                <h3>
+                                                    <a href="/product/<%= product._id %>">
+                                                        <%= product.description %>
+                                                    </a>
+                                                </h3>
+                                                <p class="price"><del></del>$
+                                                    <%= product.prix %>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <% }); %>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="container">
+                        <div class="col-md-12">
+                            <div class="box slideshow">
+                                <h3>Soyez inspiré</h3>
+                                <p class="lead">Inspirez-vous de nos designers de classe mondiale</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <%- include ("../partials/footer.ejs") %>
+                <%- include ("../partials/javascript.ejs") %>
+    </body>
+
+</html>
