@@ -48,39 +48,49 @@ app.use("/", routePages);
 app.use(errorHandler);
 
 app.post('/cart', async (req, res) => {
-    const session = await stripe.checkout.sessions.create({
-        line_items: [
-            {
-                price_data: {
-                    currency: 'usd',
-                    product_data: {
-                        name: 'Node.js and Express book'
-                    },
-                    unit_amount: 50 * 100
-                },
-                quantity: 1
+    const { products = [] } = req.body; 
+    const lineItems = products.map(product => ({
+        price_data: {
+            currency: 'usd',
+            product_data: {
+                name: product.nom 
             },
-            {
-                price_data: {
-                    currency: 'usd',
-                    product_data: {
-                        name: 'JavaScript T-Shirt'
-                    },
-                    unit_amount: 20 * 100
+            unit_amount: product.prix * 100 
+        },
+        quantity: product.quantity 
+    }));
+
+    if (lineItems.length === 0) {
+        const defaultProduct = {
+            nom: "Test Product",
+            prix: 100, // Sample price in cents
+            quantity: 1
+        };
+
+        lineItems.push({
+            price_data: {
+                currency: 'usd',
+                product_data: {
+                    name: defaultProduct.nom,
                 },
-                quantity: 2
-            }            
-        ],
+                unit_amount: defaultProduct.prix * 100,
+            },
+            quantity: defaultProduct.quantity,
+        });
+    }
+    
+    const session = await stripe.checkout.sessions.create({
+        line_items: lineItems,
         mode: 'payment',
         shipping_address_collection: {
             allowed_countries: ['US', 'CA']
         },
         success_url: `${process.env.BASE_URL}/complete?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${process.env.BASE_URL}/cancel`
-    })
+    });
+    res.redirect(session.url);
+});
 
-    res.redirect(session.url)
-})
 
 app.get('/complete', async (req, res) => {
     const result = Promise.all([

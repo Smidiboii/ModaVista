@@ -92,6 +92,16 @@ pages.get("/logout", onlyAuthUser, (req, res) => {
 	res.redirect("/");
 });
 
+pages.use("*", (req, res, next) => {
+    console.log("Request URL:", req.originalUrl);
+    if (req.originalUrl.startsWith("/cart")) {
+        return next();
+    } else {
+        setTimeout(() => {
+            res.status(404).render("pages/404", req.sharedData);
+        }, 500);
+    }
+});
 
 
 export default pages;
