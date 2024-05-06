@@ -89,6 +89,8 @@ pages.get(
 	})
 );
 pages.get("/api/cart", async (req, res) => {
+		const client = await Client.findById(req.sharedData.userId);
+		res.json(client.cart);
 
 });
 pages.get(
@@ -120,9 +122,6 @@ pages.get(
 );
 
 
-pages.get("/api/userCart", async (req, res) =>{
-
-});
 pages.get("/NousTrouver", tryCatch(async (req, res) => {
 	res.render("pages/NousTrouver", req.sharedData);
 })

@@ -118,15 +118,11 @@ api.post(
 			return res.status(404).json({ message: "Utilisateur non trouvé" });
 		}
 
-		// Récupération du contenu du panier du client
 		const cartContent = client.cart;
 
-		// Récupération des détails complets de chaque produit dans le panier
 		const productsDetails = await Promise.all(cartContent.map(async (item) => {
-			// Recherche du produit dans la base de données à partir de l'ID
 			const product = await Produit.findById(item.produit);
 
-			// Retourne les détails complets du produit
 			return {
 				produit: product,
 				quantite: item.quantite
