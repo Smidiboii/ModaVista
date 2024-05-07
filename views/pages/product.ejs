@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<%- include ("../partials/head.ejs") %>
+
+    <body>
+        <!-- navbar-->
+        <%- include ("../partials/navbar.ejs") %>
+            <div id="all">
+                <div id="content">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12 order-1 order-lg-2">
+                                <div id="productMain" class="row">
+                                    <div class="col-md-6">
+                                        <div data-slider-id="1" class="owl-carousel shop-detail-carousel">
+                                            <div class="item">
+                                                <img src="/assets/img/<%= produit.nom %>.jpg" alt="" class="img-fluid" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="box">
+                                            <h1 class="text-center">
+                                                <%= produit.nom %>
+                                            </h1>
+                                            <p class="goToDescription">
+                                                <a href="#details" class="scroll-to">Faites défiler jusqu'aux détails du produit</a
+											>
+										</p>
+										<p class="price">$<%= produit.prix %></p>
+										<p class="text-center buttons">
+											<a href="#" class="btn btn-primary"
+												><i class="fa fa-shopping-cart"></i> Add to cart</a
+											>
+										</p>
+									</div>
+								</div>
+							</div>
+							<div id="details" class="box">
+								<p></p>
+								<h4>Product details</h4>
+								<p><%= produit.description %></p>
+								<h4>Marque</h4>
+								<p><%= produit.marque %></p>
+								<h4>Taille</h4>
+								<p><%= produit.taille %></p>
+								<h4>Genre</h4>
+								<p><%= produit.genre %></p>
+
+								<hr />
+								<div class="social">
+									<h4 class="text-danger">Partage-le avec tes potes</h4>
+										<div class="btn-group" role="group">
+											<a href="#" class="btn btn-primary"><i class="fa fa-facebook"></i> Facebook</a>
+                                                <a href="#" class="btn btn-danger"><i class="fa fa-google-plus"></i> Google+</a>
+                                                <a href="#" class="btn btn-info"><i class="fa fa-twitter"></i> Twitter</a>
+                                                <a href="#" class="btn btn-dark"><i class="fa fa-envelope"></i> Email</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.col-md-9-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <%- include ("../partials/footer.ejs") %>
+
+                <!-- JavaScript files-->
+                <%- include ("../partials/javascript.ejs") %>
+    </body>
+
+</html>
