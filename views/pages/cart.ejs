@@ -2,117 +2,93 @@
 <html>
 <%- include ("../partials/head.ejs") %>
 
-    <body>
-        <!-- navbar-->
-        <%- include ("../partials/navbar.ejs") %>
-            <div id="all">
-                <div id="content">
-                    <div class="container">
-                        <div class="row">
-                            <div id="basket" class="col-lg-9">
-                                <div class="box">
-                                    <form method="post" action="#">
-                                        <h1>Shopping cart</h1>
-                                        <p class="text-muted">You currently have 3 item(s) in your cart.</p>
-                                        <div class="table-responsive">
-                                            <table class="table">
-                                                <thead>
-                                                    <tr>
-                                                        <th colspan="2">Product</th>
-                                                        <th>Quantity</th>
-                                                        <th>Unit price</th>
-                                                        <th>Discount</th>
-                                                        <th colspan="2">Total</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>
-                                                            <a href="#"><img src="img/detailsquare.jpg" alt="White Blouse Armani" /></a>
-                                                        </td>
-                                                        <td><a href="#">White Blouse Armani</a></td>
-                                                        <td>
-                                                            <input type="number" value="2" class="form-control" />
-                                                        </td>
-                                                        <td>$123.00</td>
-                                                        <td>$0.00</td>
-                                                        <td>$246.00</td>
-                                                        <td>
-                                                            <a href="#"><i class="fa fa-trash-o"></i></a>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <a href="#"><img src="img/basketsquare.jpg" alt="Black Blouse Armani" /></a>
-                                                        </td>
-                                                        <td><a href="#">Black Blouse Armani</a></td>
-                                                        <td>
-                                                            <input type="number" value="1" class="form-control" />
-                                                        </td>
-                                                        <td>$200.00</td>
-                                                        <td>$0.00</td>
-                                                        <td>$200.00</td>
-                                                        <td>
-                                                            <a href="#"><i class="fa fa-trash-o"></i></a>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                                <tfoot>
-                                                    <tr>
-                                                        <th colspan="5">Total</th>
-                                                        <th colspan="2">$446.00</th>
-                                                    </tr>
-                                                </tfoot>
-                                            </table>
-                                        </div>
-                                        <!-- /.table-responsive-->
-                                        <div class="box-footer d-flex justify-content-between flex-column flex-lg-row">
-                                            <div class="left">
-                                                <a href="#" class="btn btn-outline-secondary"><i class="fa fa-chevron-left"></i> Continue shopping</a
-											>
+	<body onload="afficherSubTots()">
+		<!-- navbar-->
+		<%- include ("../partials/navbar.ejs") %>
+			<div id="all">
+				<div id="content">
+					<div class="container">
+						<div class="row">
+							<div id="basket" class="col-lg-9">
+								<div class="box">
+									<form method="post" action="#">
+										<h1>Shopping cart</h1>
+										<p class="text-muted">You currently have 3 item(s) in your cart.</p>
+										<div class="table-responsive">
+											<table class="table">
+												<thead>
+													<tr>
+														<th colspan="2">Product</th>
+														<th>Quantity</th>
+														<th>Unit price</th>
+														<th>Discount</th>
+														<th colspan="2">Total</th>
+													</tr>
+												</thead>
+												<tbody>
+													<div id="BoiteProduits">
+
+														<%for(let i=0; i < produits.length; i++){ %>
+														<tr>
+															<td>
+																<a href="#"><img
+																		src="/assets/img/<%= produits[i].nom %>.jpg" /></a>
+															</td>
+															<td><a href="/product/<%= produits[i]._id %>">
+																	<%= produits[i].nom %>
+																</a></td>
+															<td>
+																<input type="number" value="1" class="form-control"
+																	id="quant" onchange="afficherSubTots()" />
+															</td>
+															<td id="price">
+																<%= produits[i].prix %>$
+															</td>
+															<td>$0.00</td>
+															<td >
+																<div id="fatAss"></div>
+															<!--subTot(<%= i %>) $-->	
+															</td>
+															<td>
+																<a href="#"><i class="fa fa-trash-o"></i></a>
+															</td>
+														</tr>
+														<% } %>
+													</div>
+													
+												</tbody>
+												<tfoot>
+													<tr>
+														<th colspan="5">Total</th>
+														<th colspan="2">
+															<%= calculTot() %>$
+														</th>
+													</tr>
+												</tfoot>
+											</table>
 										</div>
-										<div class="right">
-											<button class="btn btn-outline-secondary">
-												<i class="fa fa-refresh"></i> Update cart
-											</button>
-											<button type="submit" class="btn btn-primary">
-												Proceed to checkout <i class="fa fa-chevron-right"></i>
-											</button>
-										</div>
-									</div>
-								</form>
-							</div>
-						</div>
-						<!-- /.col-lg-9-->
-						<div class="col-lg-3">
-							<div id="order-summary" class="box">
-								<div class="box-header">
-									<h3 class="mb-0">Order summary</h3>
-								</div>
-								<p class="text-muted">
-									Shipping and additional costs are calculated based on the values you have entered.
-								</p>
-								<div class="table-responsive">
-									<table class="table">
-										<tbody>
-											<tr>
-												<td>Order subtotal</td>
-												<th>$446.00</th>
-											</tr>
-											<tr>
-												<td>Shipping and handling</td>
-												<th>$10.00</th>
-											</tr>
-											<tr>
-												<td>Tax</td>
-												<th>$0.00</th>
-											</tr>
-											<tr class="total">
-												<td>Total</td>
-												<th>$456.00</th>
-											</tr>
-										</tbody>
-									</table>
+									
+										<%
+										
+										%>
+
+										<% function calculTot(){ var tot=0; for(let i=0; i < produits.length; i++) { tot
+											+=produits[i].prix ; } return tot; } %>
+											<!-- /.table-responsive-->
+											<div
+												class="box-footer d-flex justify-content-between flex-column flex-lg-row">
+												<div class="left">
+													<a href="#" class="btn btn-outline-secondary"><i
+															class="fa fa-chevron-left"></i> Continue shopping</a>
+												</div>
+												<div class="right">
+
+													<button type="submit" class="btn btn-primary">
+														Proceed to checkout <i class="fa fa-chevron-right"></i>
+													</button>
+												</div>
+											</div>
+									</form>
 								</div>
 							</div>
 							<div class="box">
@@ -126,8 +102,7 @@
 									<div class="input-group">
 										<input type="text" class="form-control" /><span class="input-group-append">
 											<button type="button" class="btn btn-primary">
-												<i class="fa fa-gift"></i></button
-										></span>
+												<i class="fa fa-gift"></i></button></span>
 									</div>
 									<!-- /input-group-->
 								</form>
@@ -137,10 +112,96 @@
 					</div>
 				</div>
 			</div>
-		</div>
-		<%- include ("../partials/footer.ejs") %>
+			</div>
+			<%- include ("../partials/footer.ejs") %>
 
-		<!-- JavaScript files-->
-		<%- include ("../partials/javascript.ejs") %>
+				<!-- JavaScript files-->
+				<%- include ("../partials/javascript.ejs") %>
 	</body>
+	
+	<%function subTot(i) {
+			let subTot = document.getElementById("price");
+			var quant = document.getElementById("quant" + i).value;
+			var prix = 5;
+			var ContenantSubTot = getElementById("subTot")
+			 var test=7;
+			console.log(test)
+			subTot = prix * quant;
+			
+		}	%>
+	<script>
+
+function calculerQuant(data){
+					var nb = 1;
+					var tab = [];
+					for(var i = 0;i<data.length();i++){
+							var val = data[i];
+							for(var j = 1;j<data.length();j++){
+								if(val == data[j]){
+									nb += 1;
+									data.splice(j,1);
+								}
+							}
+					}
+		}
+
+		function afficherSubTots() {
+            let url = "http://localhost:3000/api/cart"; 
+			var price = document.getElementById("price").innerText;
+			var quant = document.getElementById("quant").value;
+            var BoiteProduits = document.getElementById("subTot");
+            var description = document.getElementById("descriptionCarte");
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+					BoiteProduits.innerText = parseFloat(quant) * parseFloat(price)  ;
+					console.log(BoiteProduits.innerText);
+					AfficherProduits(data);
+                }).catch(error => {
+                    console.log(error);
+                })
+        }
+		function AfficherProduits(listeIds){
+			var listeProduits = <%= produits %>;
+			console.log(listeProduits);
+			for (let index = 0; index < listeIds.length; index++) {
+				for (let index2 = 0; index2 < listeProduits.length; index2++) {
+					if(listeIds[index]==listeProduits[index2]._id ){
+						const nomProduit = listeProduits[index2].nom;
+						const prixProduit = listeProduits[index2].prix;
+						console.log(nomProduit+prixProduit);
+						getElementById("BoiteProduits").innerHTML =`
+					
+						<td>
+							<a href="#"><img
+								src="/assets/img/${nomProduit}.jpg" /></a>
+						</td>
+						td><a href="/product/${listeIds[index]}">
+							${nomProduit}>
+																	</a></td>
+																<td>
+																	<input type="number" value="1" class="form-control"
+																		id="quant" onchange="afficherSubTots()" />
+																</td>
+																<td id="price">
+																	${prixProduit}$
+																</td>
+																<td>$0.00</td>
+																<td >
+																	<div id="subTot"></div>
+																<!--subTot(${index}) $-->	
+																</td>
+																<td>
+																	<a href="#"><i class="fa fa-trash-o"></i></a>
+																</td>
+															</tr>
+						
+						`;
+						break;}
+					}
+				}
+																
+			}
+	</script>
+
 </html>

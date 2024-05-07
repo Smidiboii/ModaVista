@@ -47,6 +47,7 @@ api.post(
 		return res.status(200).json({ message: "Votre compte a été créé avec succès" });
 	})
 );
+<<<<<<< HEAD
 api.post(
 	"/account",
 	tryCatch(async (req, res) => {
@@ -69,6 +70,8 @@ api.post(
 		return res.status(200).json({ message: "Votre compte a été créé avec succès" });
 	})
 );
+=======
+>>>>>>> 8014e0d524de251821865071e87f22ae69b0bc8a
 api.post(
 	"/login",
 	tryCatch(async (req, res) => {
@@ -106,4 +109,55 @@ api.get(
 	})
 );
 
+api.post(
+	"/cart", auth,
+	tryCatch(async (req, res) => {
+		const INVALID_BODY = 'Les champs sont invalides'
+		const userId = req.auth.userId;
+		const { produitsID } = req.body;
+
+		if (!produitsID || !produitsID instanceof Array)
+		{
+			return res.status(400).json({ message: "Champs manquants" });
+		}
+
+		const client = await Client.findById(userId);
+
+		client.cart = [...client.cart, ...produitsID]
+		client.save()
+
+		return res.status(200).json({ message: "Ajouté au panier", produitsID });
+	})
+)
+
+api.post(
+	"/userCart",
+	auth,
+	tryCatch(async (req, res) => {
+		const userId = req.auth.userId;
+
+		// Recherche du client dans la base de données
+		const client = await Client.findById(userId);
+
+		if (!client) {
+			return res.status(404).json({ message: "Utilisateur non trouvé" });
+		}
+
+		const cartContent = client.cart;
+
+		const productsDetails = await Promise.all(cartContent.map(async (item) => {
+			const product = await Produit.findById(item.produit);
+
+			return {
+				produit: product,
+				quantite: item.quantite
+			};
+		}));
+
+		return res.status(200).json({ cartContent: productsDetails });
+	})
+);
+
+
 export default api;
+

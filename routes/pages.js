@@ -5,7 +5,11 @@ import tryCatch from "../utils/tryCatch.js";
 import Produit from "../models/produit.js";
 import Commande from "../models/commande.js";
 import { MongoClient } from "mongodb";
+<<<<<<< HEAD
 import { ObjectId } from 'mongodb';
+=======
+import Client from "../models/client.js";
+>>>>>>> 8014e0d524de251821865071e87f22ae69b0bc8a
 
 const pages = express.Router();
 
@@ -85,10 +89,14 @@ pages.get(
 
 		const produit = await Produit.findById(produitId);
 
-		res.render("pages/product", { ...req.sharedData, produit });
+		res.render("pages/product", { ...req.sharedData, produit, produitId, Commande });
 	})
 );
+pages.get("/api/cart", async (req, res) => {
+		const client = await Client.findById(req.sharedData.userId);
+		res.json(client.cart);
 
+});
 pages.get(
 	"/account",
 	onlyAuthUser,
@@ -103,20 +111,30 @@ pages.get(
 	})
 );
 
+
 pages.get(
 	"/cart",
 	onlyAuthUser,
 	tryCatch(async (req, res) => {
+<<<<<<< HEAD
 
 
 		res.render("pages/cart", req.sharedData);
+=======
+		const client = await Client.findById(req.sharedData.userId).populate('cart.produitId');
+
+		const cartContent = client.cart;
+		let produits =[] ;
+
+		for(let i =0; i<cartContent.length;i++){
+
+			produits.push(await Produit.findById(cartContent[i]))
+		}
+		res.render("pages/cart", { ...req.sharedData, cartContent , produits});
+>>>>>>> 8014e0d524de251821865071e87f22ae69b0bc8a
 	})
 );
 
-pages.get("/logout", onlyAuthUser, (req, res) => {
-	res.clearCookie("token");
-	res.redirect("/");
-});
 
 pages.get("/NousTrouver", tryCatch(async (req, res) => {
 	res.render("pages/NousTrouver", req.sharedData);

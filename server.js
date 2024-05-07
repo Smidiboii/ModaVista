@@ -47,4 +47,8 @@ app.use(errorHandler);
 // expose assets
 app.listen(3000, function () {
     console.log("Le serveur fonctionne sur http://localhost:3000");
+<<<<<<< HEAD
 });
+=======
+});
+>>>>>>> 8014e0d524de251821865071e87f22ae69b0bc8a
