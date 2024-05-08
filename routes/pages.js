@@ -108,7 +108,8 @@ pages.get(
 	"/cart",
 	onlyAuthUser,
 	tryCatch(async (req, res) => {
-		const client = await Client.findById(req.sharedData.userId).populate('cart.produitId');
+		const idClient = req.sharedData.userId;
+		const client = await Client.findById(idClient).populate('cart.produitId');
 
 		const cartContent = client.cart;
 		let produits =[] ;
@@ -117,7 +118,8 @@ pages.get(
 
 			produits.push(await Produit.findById(cartContent[i]))
 		}
-		res.render("pages/cart", { ...req.sharedData, cartContent , produits});
+		console.log(idClient);
+		res.render("pages/cart", { ...req.sharedData, cartContent , produits, idClient});
 	})
 );
 

@@ -1,19 +1,51 @@
 <!DOCTYPE html>
 <html>
 <%- include ("../partials/head.ejs") %>
+	<script>
+		async function enleverProduits(i) {
+			var listeProduits = "<%= compterProduits() %>";
+			id = listeProduits.split(",")[i].split(";")[0];
+			await fetch("/api/cart/enlever", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					idClient: "<%= idClient %>",
+					produitId: id
+				}),
+			});
+		}
+		async function changerQuantiteDeProd(id,i){
+			var listeProduits = "<%= compterProduits() %>";
+			quant = document.getElementById(`quant${i}`).value;
+			await fetch("/api/cart/modifierQuantiter", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					idClient: "<%= idClient %>",
+					produitId: id,
+					Quant : quant
+				}),
+			});
+		}
 
-	<body onload="afficherSubTots()">
+		
+
+	</script>
+
+	<body>
 		<!-- navbar-->
 		<%- include ("../partials/navbar.ejs") %>
-			<div id="all">
-				<div id="content">
-					<div class="container">
-						<div class="row">
-							<div id="basket" class="col-lg-9">
-								<div class="box">
-									<form method="post" action="#">
-										<h1>Shopping cart</h1>
-										<p class="text-muted">You currently have 3 item(s) in your cart.</p>
+			<% var total=0 %>
+				<div id="all">
+					<div id="content">
+						<div class="container">
+							<div class="row">
+								<div id="basket" class="col-lg-9">
+									<div class="box">
 										<div class="table-responsive">
 											<table class="table">
 												<thead>
@@ -21,187 +53,89 @@
 														<th colspan="2">Product</th>
 														<th>Quantity</th>
 														<th>Unit price</th>
-														<th>Discount</th>
-														<th colspan="2">Total</th>
+														<th colspan="2">Subtotal</th>
 													</tr>
 												</thead>
 												<tbody>
 													<div id="BoiteProduits">
-
-														<%for(let i=0; i < produits.length; i++){ %>
-														<tr>
-															<td>
-																<a href="#"><img
-																		src="/assets/img/<%= produits[i].nom %>.jpg" /></a>
-															</td>
-															<td><a href="/product/<%= produits[i]._id %>">
-																	<%= produits[i].nom %>
-																</a></td>
-															<td>
-																<input type="number" value="1" class="form-control"
-																	id="quant" onchange="afficherSubTots()" />
-															</td>
-															<td id="price">
-																<%= produits[i].prix %>$
-															</td>
-															<td>$0.00</td>
-															<td >
-																<div id="fatAss"></div>
-															<!--subTot(<%= i %>) $-->	
-															</td>
-															<td>
-																<a href="#"><i class="fa fa-trash-o"></i></a>
-															</td>
-														</tr>
-														<% } %>
-													</div>
-													
-												</tbody>
-												<tfoot>
-													<tr>
-														<th colspan="5">Total</th>
-														<th colspan="2">
-															<%= calculTot() %>$
-														</th>
-													</tr>
-												</tfoot>
-											</table>
-										</div>
-									
-										<%
-										
-										%>
-
-										<% function calculTot(){ var tot=0; for(let i=0; i < produits.length; i++) { tot
-											+=produits[i].prix ; } return tot; } %>
-											<!-- /.table-responsive-->
-											<div
-												class="box-footer d-flex justify-content-between flex-column flex-lg-row">
-												<div class="left">
-													<a href="#" class="btn btn-outline-secondary"><i
-															class="fa fa-chevron-left"></i> Continue shopping</a>
-												</div>
-												<div class="right">
-
-													<button type="submit" class="btn btn-primary">
-														Proceed to checkout <i class="fa fa-chevron-right"></i>
-													</button>
-												</div>
-											</div>
-									</form>
-								</div>
-							</div>
-							<div class="box">
-								<div class="box-header">
-									<h4 class="mb-0">Coupon code</h4>
-								</div>
-								<p class="text-muted">
-									If you have a coupon code, please enter it in the box below.
-								</p>
-								<form>
-									<div class="input-group">
-										<input type="text" class="form-control" /><span class="input-group-append">
-											<button type="button" class="btn btn-primary">
-												<i class="fa fa-gift"></i></button></span>
-									</div>
-									<!-- /input-group-->
-								</form>
-							</div>
-						</div>
-						<!-- /.col-md-3-->
-					</div>
-				</div>
-			</div>
-			</div>
-			<%- include ("../partials/footer.ejs") %>
-
-				<!-- JavaScript files-->
-				<%- include ("../partials/javascript.ejs") %>
-	</body>
-	
-	<%function subTot(i) {
-			let subTot = document.getElementById("price");
-			var quant = document.getElementById("quant" + i).value;
-			var prix = 5;
-			var ContenantSubTot = getElementById("subTot")
-			 var test=7;
-			console.log(test)
-			subTot = prix * quant;
-			
-		}	%>
-	<script>
-
-function calculerQuant(data){
-					var nb = 1;
-					var tab = [];
-					for(var i = 0;i<data.length();i++){
-							var val = data[i];
-							for(var j = 1;j<data.length();j++){
-								if(val == data[j]){
-									nb += 1;
-									data.splice(j,1);
-								}
-							}
-					}
-		}
-
-		function afficherSubTots() {
-            let url = "http://localhost:3000/api/cart"; 
-			var price = document.getElementById("price").innerText;
-			var quant = document.getElementById("quant").value;
-            var BoiteProduits = document.getElementById("subTot");
-            var description = document.getElementById("descriptionCarte");
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-					BoiteProduits.innerText = parseFloat(quant) * parseFloat(price)  ;
-					console.log(BoiteProduits.innerText);
-					AfficherProduits(data);
-                }).catch(error => {
-                    console.log(error);
-                })
-        }
-		function AfficherProduits(listeIds){
-			var listeProduits = <%= produits %>;
-			console.log(listeProduits);
-			for (let index = 0; index < listeIds.length; index++) {
-				for (let index2 = 0; index2 < listeProduits.length; index2++) {
-					if(listeIds[index]==listeProduits[index2]._id ){
-						const nomProduit = listeProduits[index2].nom;
-						const prixProduit = listeProduits[index2].prix;
-						console.log(nomProduit+prixProduit);
-						getElementById("BoiteProduits").innerHTML =`
-					
-						<td>
-							<a href="#"><img
-								src="/assets/img/${nomProduit}.jpg" /></a>
-						</td>
-						td><a href="/product/${listeIds[index]}">
-							${nomProduit}>
+														<% ListeProduits=compterProduits(); for (let i=0; i <
+															ListeProduits.length; i++) {
+															id=ListeProduits[i].split(";")[0];
+															nb=ListeProduits[i].split(";")[1];
+															produit=produits.find(produit=> produit._id == id);
+															nom = produit.nom;
+															prix = produit.prix;
+															subtot = prix * nb;
+															%>
+															<tr>
+																<td>
+																	<a href="/product/<%=id%>"><img
+																			src="/assets/img/<%=nom%>.jpg" /></a>
+																</td>
+																<td><a href="/product/<%=id%>">
+																		<%=nom%>
 																	</a></td>
 																<td>
-																	<input type="number" value="1" class="form-control"
-																		id="quant" onchange="afficherSubTots()" />
+																	<input type="number" value="<%=nb%>"
+																		 id="quant<%=i%>" onchange='changerQuantiteDeProd("<%=id%>","<%=i%>")'
+																		min="1" />
 																</td>
 																<td id="price">
-																	${prixProduit}$
-																</td>
-																<td>$0.00</td>
-																<td >
-																	<div id="subTot"></div>
-																<!--subTot(${index}) $-->	
+																	<%=prix%>$
 																</td>
 																<td>
-																	<a href="#"><i class="fa fa-trash-o"></i></a>
+																	<div id="subT">
+																		<%=subtot.toFixed(2)%>$
+																	</div>
+
+																</td>
+																<td>
+																	<button class="btn-primary"
+																		onclick="enleverProduits(<%=i%>), window.location.reload()"><i
+																			class="fa fa-trash-o"></i></button>
 																</td>
 															</tr>
-						
-						`;
-						break;}
-					}
-				}
-																
-			}
-	</script>
+													</div>
+													<%total+= subtot%>
+													<% } %>
+										</div>
 
+										</tbody>
+										<tfoot>
+											<tr>
+												<th colspan="5">Total</th>
+												<th colspan="2" id="total">
+													<%= total.toFixed(2) %>$
+												</th>
+											</tr>
+											<tr>
+												<th colspan="5"> <button type="submit" class="btn btn-primary">
+													Proceed to checkout <i class="fa fa-chevron-right"></i>
+												</button></th>
+											</tr>
+										</tfoot>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				</div>
+				</div>
+				<%- include ("../partials/footer.ejs") %>
+
+					<!-- JavaScript files-->
+					<%- include ("../partials/javascript.ejs") %>
+	</body>
+
+	<%function compterProduits() { nbProduits=0; idsProduits=[]; for (let i=0; i < produits.length; i++) {
+		produitDuplique=false; for (let j=0; j < idsProduits.length; j++) { if
+		(produits[i]._id==idsProduits[j].split(";")[0]) { produitDuplique=true; idsProduits[j]=produits[i]._id + ";" +
+		(parseInt(idsProduits[j].split(";")[1]) + 1); break; } } if (!produitDuplique) { nbProduits++;
+		idsProduits.push(produits[i]._id + ";1" ); } } return idsProduits; } function enleverProduit(id) {
+		console.log("id="+id);
+		}
+		%>
+		
 </html>

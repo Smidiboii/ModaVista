@@ -76,6 +76,45 @@ api.post(
 	})
 );
 
+api.post(
+	"/cart/enlever",
+	tryCatch(async (req, res) => {
+		const { idClient } = req.body;
+		const { produitId } = req.body;
+		
+		await Client.findByIdAndUpdate(idClient, {
+			$pull: { 'cart': produitId }
+		});
+
+	})
+);
+
+api.post(
+	"/cart/modifierQuantiter",
+	tryCatch(async (req, res) => {
+		const { idClient } = req.body;
+		const { produitId } = req.body;
+		const  { Quant } = req.body;
+		// Recherche du client dans la base de données
+		const client = await Client.findById(idClient);
+		
+		if (!client) {
+			return res.status(404).json({ message: "Utilisateur non trouvé" });
+		}
+
+		const cartContent = client.cart;
+		
+		await Client.findByIdAndUpdate(idClient, {
+			$pull: { 'cart': produitId }
+		});
+		
+		for (let index = 0; index < Quant; index++) {
+			await Client.findByIdAndUpdate(idClient, {
+			$push: {'cart': produitId}
+		});	
+		}
+	})
+);
 api.get(
 	"/check-auth",
 	auth,
