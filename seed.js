@@ -43,8 +43,6 @@ import bcrypt from "bcrypt";
 
     const collectionChandail = await Collection.create({ nom: "Chandail" });
     const collectionChaussure = await Collection.create({ nom: "Chaussures" });
-    const collectionValentin2024 = await Collection.create({ nom: "Valentin 2024" });
-
 
     await Produit.create([{
             nom: "Chemise décontractée",
