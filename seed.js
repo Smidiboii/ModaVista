@@ -44,8 +44,6 @@ import bcrypt from "bcrypt";
     const collectionChandail = await Collection.create({ nom: "Chandail" });
     const collectionChaussure = await Collection.create({ nom: "Chaussures" });
     const collectionValentin2024 = await Collection.create({ nom: "Valentin 2024" });
-    const collectionEte2024 = await Collection.create({ nom: "Été 2024" });
-    const collectionHiver2024 = await Collection.create({ nom: "Hiver 2024" });
 
 
     await Produit.create([{
@@ -100,7 +98,7 @@ import bcrypt from "bcrypt";
             taille: 'M',
             genre: 'F',
             prix: 59.99,
-            collectionId: collectionValentin2024._id,
+            collectionId: collectionChandail._id,
         },
         {
             nom: "Pull en laine à col rond",
@@ -235,6 +233,51 @@ import bcrypt from "bcrypt";
             taille: "M",
             genre: "H",
             prix: 34.99,
+            collectionId: collectionChaussure._id,
+        },
+        {
+            nom: "Escarpins à talons hauts",
+            description: "Escarpins élégants à talons hauts, parfaits pour les occasions spéciales et les soirées. Fabriqués en cuir verni avec un design classique et intemporel.",
+            marque: "FancyFootwear",
+            taille: "M",
+            genre: "F",
+            prix: 89.99,
+            collectionId: collectionChaussure._id,
+        },
+        {
+            nom: "Bottines en daim",
+            description: "Bottines en daim souple avec un talon bloc confortable. Parfaites pour un look décontracté chic ou pour ajouter une touche de style à vos tenues automnales.",
+            marque: "SuedeStyle",
+            taille: "M",
+            genre: "F",
+            prix: 79.99,
+            collectionId: collectionChaussure._id,
+        },
+        {
+            nom: "Baskets de sport légères",
+            description: "Baskets de sport légères avec une semelle flexible pour un confort optimal pendant l'entraînement. Idéales pour la course à pied, la salle de sport et les activités quotidiennes.",
+            marque: "ActiveFit",
+            taille: "M",
+            genre: "F",
+            prix: 69.99,
+            collectionId: collectionChaussure._id,
+        },
+        {
+            nom: "Sandales plates en cuir",
+            description: "Sandales plates en cuir véritable avec des lanières ajustables pour un ajustement parfait. Confortables et polyvalentes, parfaites pour les journées estivales décontractées.",
+            marque: "SummerComfort",
+            taille: "M",
+            genre: "F",
+            prix: 49.99,
+            collectionId: collectionChaussure._id,
+        },
+        {
+            nom: "Ballerines classiques",
+            description: "Ballerines classiques avec un bout arrondi et un nœud décoratif. Confortables et élégantes, parfaites pour compléter vos tenues de travail ou de loisirs.",
+            marque: "ClassicChic",
+            taille: "M",
+            genre: "F",
+            prix: 59.99,
             collectionId: collectionChaussure._id,
         }
     ]);
