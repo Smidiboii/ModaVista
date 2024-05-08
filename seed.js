@@ -43,6 +43,7 @@ import bcrypt from "bcrypt";
 
     const collectionChandail = await Collection.create({ nom: "Chandail" });
     const collectionChaussure = await Collection.create({ nom: "Chaussures" });
+    const collectionPantalon = await Collection.create({ nom: "Pantalons" });
 
     await Produit.create([{
             nom: "Chemise décontractée",
@@ -277,6 +278,51 @@ import bcrypt from "bcrypt";
             genre: "F",
             prix: 59.99,
             collectionId: collectionChaussure._id,
+        },
+        {
+            nom: "Jean slim taille haute",
+            description: "Jean slim taille haute, moulant et flatteur. Fabriqué avec un denim extensible pour un confort optimal et une silhouette élégante.",
+            marque: "DenimDream",
+            taille: "S",
+            genre: "F",
+            prix: 59.99,
+            collectionId: collectionPantalon._id,
+        },
+        {
+            nom: "Pantalon chino en coton",
+            description: "Pantalon chino en coton léger et respirant, parfait pour les journées de travail ou les occasions décontractées. Coupe droite et polyvalente pour une tenue élégante.",
+            marque: "CasualChic",
+            taille: "M",
+            genre: "F",
+            prix: 49.99,
+            collectionId: collectionPantalon._id,
+        },
+        {
+            nom: "Legging de yoga",
+            description: "Legging de yoga confortable et extensible, idéal pour les séances de yoga, le fitness ou les activités quotidiennes. Taille haute pour un maintien optimal.",
+            marque: "YogaFlex",
+            taille: "L",
+            genre: "F",
+            prix: 39.99,
+            collectionId: collectionPantalon._id,
+        },
+        {
+            nom: "Pantalon cargo décontracté",
+            description: "Pantalon cargo décontracté avec poches pratiques et détails de coutures. Parfait pour un look urbain décontracté ou pour les aventures en plein air.",
+            marque: "UrbanCargo",
+            taille: "XL",
+            genre: "F",
+            prix: 69.99,
+            collectionId: collectionPantalon._id,
+        },
+        {
+            nom: "Pantalon palazzo fluide",
+            description: "Pantalon palazzo fluide et élégant, parfait pour les occasions spéciales ou pour une tenue de soirée sophistiquée. Coupe large et confortable pour une allure glamour.",
+            marque: "ElegantStyle",
+            taille: "S",
+            genre: "F",
+            prix: 79.99,
+            collectionId: collectionPantalon._id,
         }
     ]);
 
