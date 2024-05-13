@@ -97,7 +97,7 @@ app.post('/cart', async (req, res) => {
         },
         allow_promotion_codes: true,
         success_url: `${process.env.BASE_URL}/complete?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${process.env.BASE_URL}/cancel`
+        cancel_url: `${process.env.BASE_URL}/cart`
     });
     const Surl = session.url;
     console.log(Surl);

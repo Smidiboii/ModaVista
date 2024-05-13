@@ -139,7 +139,7 @@ pages.use("*", (req, res, next) => {
         return next();
     } else {
         setTimeout(() => {
-            res.status(404).render("pages/404", req.sharedData);
+            res.status(404).render("pages/", req.sharedData);
         }, 500);
     }
 });
