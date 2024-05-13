@@ -90,30 +90,30 @@ api.post(
 );
 
 api.post(
-	"/cart/modifierQuantiter",
-	tryCatch(async (req, res) => {
-		const { idClient } = req.body;
-		const { produitId } = req.body;
-		const  { Quant } = req.body;
-		// Recherche du client dans la base de données
-		const client = await Client.findById(idClient);
-		
-		if (!client) {
-			return res.status(404).json({ message: "Utilisateur non trouvé" });
-		}
+    "/cart/modifierQuantiter",
+    tryCatch(async (req, res) => {
+        const { idClient } = req.body;
+        const { produitId } = req.body;
+        const { Quant } = req.body;
+        // Recherche du client dans la base de données
+        const client = await Client.findById(idClient);
 
-		const cartContent = client.cart;
-		
-		await Client.findByIdAndUpdate(idClient, {
-			$pull: { 'cart': produitId }
-		});
-		
-		for (let index = 0; index < Quant; index++) {
-			await Client.findByIdAndUpdate(idClient, {
-			$push: {'cart': produitId}
-		});	
-		}
-	})
+        if (!client) {
+            return res.status(404).json({ message: "Utilisateur non trouvé" });
+        }
+
+        await Client.findByIdAndUpdate(idClient, {
+            $pull: { 'cart': produitId }
+        });
+
+        for (let index = 0; index < Quant; index++) {
+            await Client.findByIdAndUpdate(idClient, {
+                $push: { 'cart': produitId }
+            });
+        }
+
+        return res.status(200).send("Quantite modifie");
+    })
 );
 api.get(
 	"/check-auth",

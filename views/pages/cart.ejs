@@ -2,6 +2,20 @@
 <html>
 <%- include ("../partials/head.ejs") %>
 	<script>
+		var subTots = null;
+		function inizialiserSubTots() {
+			if (subTots == null) {
+				subTots = new Array("<%= compterProduits() %>".split(',').length);
+			}
+			for (let j = 0; j < subTots.length; j++) {
+				if (document.getElementById(`btnConfirmer${j}`).innerHTML == ``) {
+					subTots[j] = document.getElementById(`subT${j}`).innerText;
+					console.log(document.getElementById(`subT${j}`).innerText);
+				} else {
+				}
+			}
+			console.log(subTots);
+		}
 		async function enleverProduits(i) {
 			var listeProduits = "<%= compterProduits() %>";
 			id = listeProduits.split(",")[i].split(";")[0];
@@ -14,11 +28,54 @@
 					idClient: "<%= idClient %>",
 					produitId: id
 				}),
-			});
+			}).then(() => {
+				window.location.reload();
+			})
 		}
-		async function changerQuantiteDeProd(id,i){
-			var listeProduits = "<%= compterProduits() %>";
+		function changerQuantiteDeProd(id, i, prix) {
+			inizialiserSubTots();
 			quant = document.getElementById(`quant${i}`).value;
+			if (quant < 1) {
+				quant = 1;
+				document.getElementById(`quant${i}`).value = 1;
+			} else if (quant > 5) {
+				quant = 5;
+				document.getElementById(`quant${i}`).value = 5;
+			}
+			document.getElementById(`subT${i}`).innerText = (prix * quant).toFixed(2) + "$";
+			document.getElementById(`btnConfirmer${i}`).innerHTML =
+				`<button class="btn-primary fa fa-check" onclick="modifierQuantite('${id}','${quant}','${i}')"/>`;
+			document.getElementById("nouvSubT").innerHTML =
+				`<th colspan="5">Nouveau Subtotal</th>
+				 <th >${CalculerNouvTotal()}</th>`;
+			document.getElementById("TitreConfirmer").innerHTML =
+				`Confirmer?`;
+
+		}
+
+		function CalculerNouvTotal() {
+			total = 0;
+			for (let j = 0; j < "<%= compterProduits() %>".split(',').length; j++) {
+				subtot = document.getElementById(`subT${j}`).innerText;
+				total += parseFloat(subtot);
+			}
+			return total.toFixed(2) + "$";
+		}
+		async function modifierQuantite(id, quant, i) {
+			var listeProduits = "<%= compterProduits() %>";
+			document.getElementById(`btnConfirmer${i}`).innerHTML = ``;
+			mettreAJourTotal(listeProduits);
+			// Mostrar pantalla de carga
+			let checkoutBtn = document.getElementById("checkout");
+			let msgButton = document.getElementById("texteButton").innerText;
+			let spinner = document.getElementById("spinner");
+			spinner.style.display = "block";
+			document.getElementById("texteButton").innerText = "";
+			checkoutBtn.style.cursor = "not-allowed";
+			checkoutBtn.style.opacity = "0.3";
+			checkoutBtn.classList.add("disabled");
+
+
 			await fetch("/api/cart/modifierQuantiter", {
 				method: "POST",
 				headers: {
@@ -27,12 +84,38 @@
 				body: JSON.stringify({
 					idClient: "<%= idClient %>",
 					produitId: id,
-					Quant : quant
+					Quant: quant
 				}),
-			});
+			}).then((response) => {
+				if (response.ok) {
+					spinner.style.display = "none";
+					checkoutBtn.style.cursor = "pointer";
+					checkoutBtn.style.opacity = "1";
+					checkoutBtn.classList.remove("disabled");
+					document.getElementById("texteButton").innerText = msgButton;
+				} else {
+					console.log("Quantité non modifiée");
+				}
+			})
+		}
+		function mettreAJourTotal(nbProduits) {
+			inizialiserSubTots();
+			var total = 0;
+			var toutConfirme = true;
+			for (let i = 0; i < subTots.length; i++) {
+				subtot = subTots[i];
+				if (document.getElementById(`btnConfirmer${i}`).innerHTML != ``) {
+					toutConfirme = false;
+				}
+				total += parseFloat(subtot);
+			}
+			if (toutConfirme) {
+				document.getElementById("TitreConfirmer").innerHTML = ``;
+				document.getElementById("nouvSubT").innerHTML = ``;
+			}
+			document.getElementById("total").innerText = total.toFixed(2) + "$";
 		}
 
-		
 
 	</script>
 
@@ -44,7 +127,7 @@
 					<div id="content">
 						<div class="container">
 							<div class="row">
-								<div id="basket" class="col-lg-9">
+								<div id="basket" class="col-lg-11">
 									<div class="box">
 										<div class="table-responsive">
 											<table class="table">
@@ -52,6 +135,7 @@
 													<tr>
 														<th colspan="2">Product</th>
 														<th>Quantity</th>
+														<th id="TitreConfirmer"></th>
 														<th>Unit price</th>
 														<th colspan="2">Subtotal</th>
 													</tr>
@@ -77,31 +161,38 @@
 																	</a></td>
 																<td>
 																	<input type="number" value="<%=nb%>"
-																		 id="quant<%=i%>" onchange='changerQuantiteDeProd("<%=id%>","<%=i%>")'
-																		min="1" />
+																		id="quant<%=i%>"
+																		onchange='changerQuantiteDeProd("<%=id%>","<%=i%>","<%=prix%>")'
+																		min="1" max="5" />
+																</td>
+																<td>
+																	<div id="btnConfirmer<%=i%>"></div>
+
 																</td>
 																<td id="price">
 																	<%=prix%>$
 																</td>
 																<td>
-																	<div id="subT">
+																	<div id="subT<%=i%>">
 																		<%=subtot.toFixed(2)%>$
 																	</div>
 
 																</td>
 																<td>
 																	<button class="btn-primary"
-																		onclick="enleverProduits(<%=i%>), window.location.reload()"><i
+																		onclick="enleverProduits(<%=i%>)"><i
 																			class="fa fa-trash-o"></i></button>
 																</td>
 															</tr>
 													</div>
 													<%total+= subtot%>
-													<% } %>
+														<% } %>
 										</div>
 
 										</tbody>
 										<tfoot>
+											<tr id="nouvSubT">
+											</tr>
 											<tr>
 												<th colspan="5">Total</th>
 												<th colspan="2" id="total">
@@ -109,9 +200,19 @@
 												</th>
 											</tr>
 											<tr>
-												<th colspan="5"> <button type="submit" class="btn btn-primary">
-													Proceed to checkout <i class="fa fa-chevron-right"></i>
-												</button></th>
+												<th colspan="5">
+													<button id="checkout" type="submit" class="btn btn-primary">
+														<div id="texteButton">Proceed to checkout</div>
+														<span>
+															<div id="spinner" class="spinner-border" role="status"
+																style="display: none;">
+																<span class="sr-only"></span>
+															</div>
+														</span>
+
+													</button>
+
+												</th>
 											</tr>
 										</tfoot>
 										</table>
