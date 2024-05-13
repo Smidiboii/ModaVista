@@ -134,7 +134,14 @@ pages.get("/api/NousTrouver", async (req, res) => {
 	res.json(emplacements);
 });
 pages.use("*", (req, res, next) => {
-	res.status(404).render("pages/404", req.sharedData);
+    console.log("Request URL:", req.originalUrl);
+    if (req.originalUrl.startsWith("/cart")) {
+        return next();
+    } else {
+        setTimeout(() => {
+            res.status(404).render("pages/404", req.sharedData);
+        }, 500);
+    }
 });
 
 export default pages;

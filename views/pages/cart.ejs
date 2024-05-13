@@ -116,7 +116,22 @@
 			document.getElementById("total").innerText = total.toFixed(2) + "$";
 		}
 
+		async function sauvegargerTotal(){
+			const totalPriceStr = document.getElementById("total").innerText;
+            const products = [];
+            const totalPrice = parseFloat(totalPriceStr);
 
+            const response = await fetch('/cart', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ Total: totalPrice, products: products })
+            })
+            
+			const data = await response.json();
+			window.location.href = data.Surl;
+		}
 	</script>
 
 	<body>
@@ -201,7 +216,7 @@
 											</tr>
 											<tr>
 												<th colspan="5">
-													<button id="checkout" type="submit" class="btn btn-primary">
+													<button id="checkout" type="submit" class="btn btn-primary" onclick="sauvegargerTotal()">
 														<div id="texteButton">Proceed to checkout</div>
 														<span>
 															<div id="spinner" class="spinner-border" role="status"

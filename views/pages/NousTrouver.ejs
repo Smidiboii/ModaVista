@@ -1,0 +1,78 @@
+</html>
+<!DOCTYPE html>
+<html>
+<%- include ("../partials/head.ejs") %>
+    <script async
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwJtkUI1WynbgKMc6HsRZa6lXMxoMluG8&callback=console.debug&libraries=maps,marker&v=beta">
+        </script>
+
+    <body onload="AfficherButtons(), afficherCarte(4)">
+        <%- include ("../partials/navbar.ejs") %>
+            <div id="all">
+                <div id="content">
+                    <div id="contenantButtons" class="d-flex text-center btn-group" style="height: 10%;">
+                    </div>
+                    <main>
+                        <div class="col-lg-11 d-flex flex-row text-center justify-content-center"
+                            style="margin: 6%; height: 50%;">
+                            <div class="col-lg-6  justify-content-center" id="contenantCarte">
+                            </div>
+                            <div class="" id="descriptionCarte"></div>
+
+                        </div>
+
+                    </main>
+
+                </div>
+            </div>
+            <%- include ("../partials/footer.ejs") %>
+                <%- include ("../partials/javascript.ejs") %>
+    </body>
+    <script>
+        function AfficherButtons() {
+            let url = "http://localhost:3000/api/NousTrouver";
+            var buttons = document.getElementById("contenantButtons");
+            buttons.innerHTML = "";
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    for (let i = 0; i < data.length; i++) {
+                        let button = document.createElement("button");
+                        button.innerHTML = data[i].pays;
+                        button.setAttribute("class", "btn btn-primary");
+                        button.setAttribute("onclick", "afficherCarte(" + i + ")");
+                        buttons.appendChild(button);
+                    }
+                }).catch(error => {
+                    console.log(error);
+                })
+        }
+        function afficherCarte(indexCarte) {
+            let url = "http://localhost:3000/api/NousTrouver";
+            var carte = document.getElementById("contenantCarte");
+            var description = document.getElementById("descriptionCarte");
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data[indexCarte].coordonées.toString());
+                    carte.innerHTML = `
+                    <gmp-map center=${data[indexCarte].coordonées.toString()} zoom="14" map-id="Map_Modavista">
+                                <gmp-advanced-marker position=${data[indexCarte].coordonées.toString()}
+                                    title="EndroitModavista"></gmp-advanced-marker>
+                            </gmp-map>
+                    `;
+                    description.innerHTML = `
+                    <h2>${data[indexCarte].pays.toString()}</h2>
+                    <ul class="list-group">
+                        <li class="list-group-item">${data[indexCarte].ville.toString()}</li>
+                        <li class="list-group-item">${data[indexCarte].adresse.toString()}</li>
+                        <li class="list-group-item">${data[indexCarte].téléphone.toString()}</li>
+                    </ul>`;
+
+                }).catch(error => {
+                    console.log(error);
+                })
+        }
+    </script>
+
+</html>
