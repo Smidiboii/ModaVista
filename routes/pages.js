@@ -6,6 +6,7 @@ import Produit from "../models/produit.js";
 import Commande from "../models/commande.js";
 import { MongoClient } from "mongodb";
 import Client from "../models/client.js";
+import Collection from "../models/collection.js";
 
 const pages = express.Router();
 
@@ -19,13 +20,13 @@ async function connectToMongoDB() {
 	try {
 		await client.connect();
 	} catch (err) {
-		console.error('Erreur avec la consultation de la BD.', err);
+		console.error("Erreur avec la consultation de la BD.", err);
 	}
 }
 
 connectToMongoDB();
 
-const db = client.db('Modavista');
+const db = client.db("Modavista");
 
 pages.use(fetchData);
 
@@ -89,9 +90,8 @@ pages.get(
 	})
 );
 pages.get("/api/cart", async (req, res) => {
-		const client = await Client.findById(req.sharedData.userId);
-		res.json(client.cart);
-
+	const client = await Client.findById(req.sharedData.userId);
+	res.json(client.cart);
 });
 pages.get(
 	"/account",
@@ -103,45 +103,80 @@ pages.get(
 	})
 );
 
-
 pages.get(
 	"/cart",
 	onlyAuthUser,
 	tryCatch(async (req, res) => {
 		const idClient = req.sharedData.userId;
-		const client = await Client.findById(idClient).populate('cart.produitId');
+		const client = await Client.findById(idClient).populate("cart.produitId");
 
 		const cartContent = client.cart;
-		let produits =[] ;
+		let produits = [];
 
-		for(let i =0; i<cartContent.length;i++){
-
-			produits.push(await Produit.findById(cartContent[i]))
+		for (let i = 0; i < cartContent.length; i++) {
+			produits.push(await Produit.findById(cartContent[i]));
 		}
 		console.log(idClient);
-		res.render("pages/cart", { ...req.sharedData, cartContent , produits, idClient});
+		res.render("pages/cart", { ...req.sharedData, cartContent, produits, idClient });
 	})
 );
 
+pages.get(
+	"/r-moda-87",
+	tryCatch(async (req, res) => {
+		// redirect vers une page collection
+		const collection = await Collection.find({ nom: "Pantalons" });
+		const colId = collection[0]._id;
+		const gender = "F";
 
-pages.get("/NousTrouver", tryCatch(async (req, res) => {
-	res.render("pages/NousTrouver", req.sharedData);
-})
+		res.redirect(`/category/${gender}/${colId}`);
+	})
+);
+
+pages.get(
+	"/r-chemises",
+	tryCatch(async (req, res) => {
+		// redirect vers une page collection
+		const collection = await Collection.find({ nom: "Chandail" });
+		const colId = collection[0]._id;
+		const gender = "F";
+
+		res.redirect(`/category/${gender}/${colId}`);
+	})
+);
+
+pages.get(
+	"/r-st-valentin",
+	tryCatch(async (req, res) => {
+		// redirect vers une page collection
+		const collection = await Collection.find({ nom: "Chaussures" });
+		const colId = collection[0]._id;
+		const gender = "F";
+
+		res.redirect(`/category/${gender}/${colId}`);
+	})
+);
+
+pages.get(
+	"/NousTrouver",
+	tryCatch(async (req, res) => {
+		res.render("pages/NousTrouver", req.sharedData);
+	})
 );
 pages.get("/api/NousTrouver", async (req, res) => {
-	const db = client.db('Modavista');
-	const emplacements = await db.collection('emplacements').find({}).toArray();
+	const db = client.db("Modavista");
+	const emplacements = await db.collection("emplacements").find({}).toArray();
 	res.json(emplacements);
 });
 pages.use("*", (req, res, next) => {
-    console.log("Request URL:", req.originalUrl);
-    if (req.originalUrl.startsWith("/cart")) {
-        return next();
-    } else {
-        setTimeout(() => {
-            res.status(404).render("pages/", req.sharedData);
-        }, 500);
-    }
+	console.log("Request URL:", req.originalUrl);
+	if (req.originalUrl.startsWith("/cart")) {
+		return next();
+	} else {
+		setTimeout(() => {
+			res.status(404).render("pages/", req.sharedData);
+		}, 500);
+	}
 });
 
 export default pages;
