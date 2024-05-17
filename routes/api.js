@@ -24,7 +24,7 @@ api.post(
 		}
 
 		if (mdp.length < 8) {
-			return res.status(400).json({ message: "Mot de passe trop court" });
+			return res.status(400).json({ message: "Mot de passe trop court (8 caracteres min)" });
 		}
 
 		const emailExists = await Client.exists({ email });
@@ -81,39 +81,38 @@ api.post(
 	tryCatch(async (req, res) => {
 		const { idClient } = req.body;
 		const { produitId } = req.body;
-		
-		await Client.findByIdAndUpdate(idClient, {
-			$pull: { 'cart': produitId }
-		});
 
+		await Client.findByIdAndUpdate(idClient, {
+			$pull: { cart: produitId },
+		});
 	})
 );
 
 api.post(
-    "/cart/modifierQuantiter",
-    tryCatch(async (req, res) => {
-        const { idClient } = req.body;
-        const { produitId } = req.body;
-        const { Quant } = req.body;
-        // Recherche du client dans la base de données
-        const client = await Client.findById(idClient);
+	"/cart/modifierQuantiter",
+	tryCatch(async (req, res) => {
+		const { idClient } = req.body;
+		const { produitId } = req.body;
+		const { Quant } = req.body;
+		// Recherche du client dans la base de données
+		const client = await Client.findById(idClient);
 
-        if (!client) {
-            return res.status(404).json({ message: "Utilisateur non trouvé" });
-        }
+		if (!client) {
+			return res.status(404).json({ message: "Utilisateur non trouvé" });
+		}
 
-        await Client.findByIdAndUpdate(idClient, {
-            $pull: { 'cart': produitId }
-        });
+		await Client.findByIdAndUpdate(idClient, {
+			$pull: { cart: produitId },
+		});
 
-        for (let index = 0; index < Quant; index++) {
-            await Client.findByIdAndUpdate(idClient, {
-                $push: { 'cart': produitId }
-            });
-        }
+		for (let index = 0; index < Quant; index++) {
+			await Client.findByIdAndUpdate(idClient, {
+				$push: { cart: produitId },
+			});
+		}
 
-        return res.status(200).send("Quantite modifie");
-    })
+		return res.status(200).send("Quantite modifie");
+	})
 );
 api.get(
 	"/check-auth",
@@ -124,25 +123,25 @@ api.get(
 );
 
 api.post(
-	"/cart", auth,
+	"/cart",
+	auth,
 	tryCatch(async (req, res) => {
-		const INVALID_BODY = 'Les champs sont invalides'
+		const INVALID_BODY = "Les champs sont invalides";
 		const userId = req.auth.userId;
 		const { produitsID } = req.body;
 
-		if (!produitsID || !produitsID instanceof Array)
-		{
+		if (!produitsID || !produitsID instanceof Array) {
 			return res.status(400).json({ message: "Champs manquants" });
 		}
 
 		const client = await Client.findById(userId);
 
-		client.cart = [...client.cart, ...produitsID]
-		client.save()
+		client.cart = [...client.cart, ...produitsID];
+		client.save();
 
 		return res.status(200).json({ message: "Ajouté au panier", produitsID });
 	})
-)
+);
 
 api.post(
 	"/userCart",
@@ -159,19 +158,19 @@ api.post(
 
 		const cartContent = client.cart;
 
-		const productsDetails = await Promise.all(cartContent.map(async (item) => {
-			const product = await Produit.findById(item.produit);
+		const productsDetails = await Promise.all(
+			cartContent.map(async (item) => {
+				const product = await Produit.findById(item.produit);
 
-			return {
-				produit: product,
-				quantite: item.quantite
-			};
-		}));
+				return {
+					produit: product,
+					quantite: item.quantite,
+				};
+			})
+		);
 
 		return res.status(200).json({ cartContent: productsDetails });
 	})
 );
 
-
 export default api;
-

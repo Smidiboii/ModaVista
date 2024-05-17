@@ -11,7 +11,6 @@ const app = express();
     Configuration de EJS
 */
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
 app.set("views", path.join(__dirname, "views"));
 
 app.set("view engine", "ejs");
