@@ -2,8 +2,6 @@
 
 Modavista est un site web de vente de vêtements en ligne. Il permet aux utilisateurs de consulter les articles disponibles, de les ajouter à leur panier et de les acheter. Les utilisateurs peuvent également consulter leur historique de commandes.
 
-![image](https://github.com/Smidiboii/ModaVista/assets/115375151/5080ea32-65f8-4fc4-b7bc-557ffa9d1828)
-
 ## Installation
 
 ```bash
