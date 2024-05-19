@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<%- include ("../partials/head.ejs") %>
+
+    <body>
+        <!-- navbar-->
+        <%- include ("../partials/navbar.ejs") %>
+            <div id="all">
+                <div id="content">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="box">
+                                    <h1>
+                                        <%= gender==="H" ? "Hommes" : "Femmes" %>
+                                    </h1>
+                                    <p>
+                                        Dans notre rayon, nous proposons une large sélection des meilleurs produits que
+                                        nous ont trouvé et soigneusement sélectionnés dans le monde entier.
+                                    </p>
+                                </div>
+
+                                <div class="row products">
+                                    <% produits.forEach(function(product) { if (product.genre !==gender) { return; } %>
+                                        <div class="col-lg-4 col-md-6">
+                                            <div class="product">
+                                                <a href="/product/<%= product._id %>"><img
+                                                        src="/assets/img/<%= product.nom %>.jpg" alt=""
+                                                        class="img-fluid" /></a>
+                                                <div class="text">
+                                                    <h3>
+                                                        <a href="/product/<%= product._id %>">
+                                                            <%= product.nom %>
+                                                        </a>
+                                                    </h3>
+                                                    <p class="price">$
+                                                        <%= product.prix.toFixed(2) %>
+                                                    </p>
+                                                    <p class="buttons">
+                                                        <a href="/product/<%= product._id %>"
+                                                            class="btn btn-outline-secondary">View detail</a>
+                                                        <button class="btn btn-primary" onclick="addToCart('<%= product._id %>')"><i
+                                                                class="fa fa-shopping-cart"></i>Add to cart</button>
+                                                    </p>
+                                                </div>
+                                                <!-- /.text-->
+                                            </div>
+                                            <!-- /.product -->
+                                        </div>
+                                        <% }); %>
+                                            <!-- /.products-->
+                                </div>
+                            </div>
+                            <!-- /.col-lg-9-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <%- include ("../partials/footer.ejs") %>
+
+                <!-- JavaScript files-->
+                <%- include ("../partials/javascript.ejs") %>
+    </body>
+    <script>
+        function addToCart(produitId) {
+            const token = getCookie('token');
+
+            // Vérifier si le token est disponible
+            if (token) {
+                fetch('/api/cart', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                    , body: JSON.stringify({
+                        'produitsID': [produitId]
+                    })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert('Article ajouté au panier');
+                    })
+                    .catch(error => {
+                        console.error('Erreur lors de la requête fetch :', error);
+                        alert('Erreur lors de la requête.');
+                    });
+            } else {
+                alert('Veuillez vous connecter.');
+            }
+        }
+    </script>
+
+</html>

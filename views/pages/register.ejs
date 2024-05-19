@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<%- include ("../partials/head.ejs") %>
+
+    <body>
+        <!-- navbar-->
+        <%- include ("../partials/navbar.ejs") %>
+
+            <div id="all">
+                <div id="content">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="box">
+                                    <h1>Nouveau compte</h1>
+                                    <p class="lead">Vous n'êtes pas encore notre client enregistré ?</p>
+                                    <p>
+                                        En vous inscrivant chez nous, un nouveau monde de la mode, des réductions fantastiques et bien plus encore s'ouvre à vous ! L’ensemble du processus ne vous prendra pas plus d’une minute !
+                                    </p>
+                                    <p class="text-muted">
+                                        Si vous avez des questions, n'hésitez pas à
+                                        <a href="#">contactez-nous</a>, notre centre de service client travaille pour vous 24h/24 et 7j/7.
+                                    </p>
+                                    <hr />
+                                    <form method="post" id="register-form">
+                                        <div class="form-group">
+                                            <label for="name">Nom</label>
+                                            <input id="name" type="text" class="form-control" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="firstname">Prénom</label>
+                                            <input id="firstname" type="text" class="form-control" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="email">Email</label>
+                                            <input id="email" type="text" class="form-control" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="password">Password</label>
+                                            <input id="password" type="password" class="form-control" />
+                                        </div>
+                                        <div class="text-center">
+                                            <button type="submit" class="btn btn-primary">
+											<i class="fa fa-user-md"></i> Register
+										</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                document.getElementById("register-form").addEventListener("submit", async(e) => {
+                    e.preventDefault();
+
+                    const name = document.getElementById("name").value;
+                    const firstname = document.getElementById("firstname").value;
+                    const email = document.getElementById("email").value;
+                    const password = document.getElementById("password").value;
+
+                    const response = await fetch("/api/signup", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            nom: name,
+                            prenom: firstname,
+                            email: email,
+                            mdp: password,
+                        }),
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        alert(data.message);
+                        window.location.href = "/";
+                    } else {
+                        alert("Erreur : " + data.message);
+                    }
+                });
+            </script>
+
+            <%- include ("../partials/footer.ejs") %>
+
+                <!-- JavaScript files-->
+                <%- include ("../partials/javascript.ejs") %>
+    </body>
+
+</html>

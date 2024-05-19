@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<%- include ("../partials/head.ejs") %>
+
+	<script>
+		// Function to get query parameters
+		function getQueryParams() {
+			const params = new URLSearchParams(window.location.search);
+			return Object.fromEntries(params.entries());
+		}
+
+		// Display alert based on payment status
+		window.onload = function () {
+			const params = getQueryParams();
+
+			if (params.payment_status) {
+				let message = '';
+				switch (params.payment_status) {
+					case 'success':
+						message = 'Payment successful!';
+						viderCart(params.session_id);
+						break;
+					case 'failure':
+						message = 'Payment failed. Please try again.';
+						break;
+					case 'canceled':
+						message = 'Payment was canceled.';
+						break;
+					default:
+						message = '';
+				}
+
+				if (message) {
+					alert(message);
+				}
+			}
+		}
+
+		async function viderCart(id) {
+			const response = await fetch("/api/complete", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					idClient: id,
+				}),
+			})
+		}
+	</script>
+
+	<body>
+		<%- include ("../partials/navbar.ejs") %>
+			<div id="all">
+				<div id="content">
+					<div class="container">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="card">
+									<img src="/assets/img/bald-girl.png" class="card-img-top" alt="Image 1" />
+									<div class="card-body">
+										<h4 class="card-title">Moda 89c</h4>
+										<a href="/r-moda-87" class="btn btn-primary">EXPLORE THE COLLECTION</a>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-6">
+								<div class="card">
+									<img src="/assets/img/mode-woman.png" class="card-img-top" alt="Image 2" />
+									<div class="card-body">
+										<h4 class="card-title">Chemises</h4>
+										<a href="/r-chemises" class="btn btn-primary">EXPLORE THE COLLECTION</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="text-center py-5">
+						<h2 class="mb-3">Saint-Valentin</h2>
+						<a href="/r-st-valentin" class="btn btn-dark">EXPLOREZ LA COLLECTION</a>
+					</div>
+
+					<div class="mb-3">
+						<img src="/assets/img/black-woman.png" alt="woman" class="d-block m-auto img-fluid" />
+					</div>
+
+					<div id="hot">
+						<div class="box py-4">
+							<div class="container">
+								<div class="row">
+									<div class="col-md-12">
+										<h2 class="mb-0">Chaud cette semaine</h2>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="container">
+							<div class="product-slider owl-carousel owl-theme">
+
+							</div>
+						</div>
+					</div>
+
+					<div class="container">
+						<div class="col-md-12">
+							<div class="box slideshow">
+								<h3>Soyez inspiré</h3>
+								<p class="lead">Inspirez-vous de nos designers de classe mondiale</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<%- include ("../partials/footer.ejs") %> <%- include ("../partials/javascript.ejs") %>
+	</body>
+
+</html>

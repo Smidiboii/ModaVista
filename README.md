@@ -1,40 +1,63 @@
-## Configuration de la Base de Données
+# Modavista
 
-1. Assurez-vous d'avoir un utilisateur nommé 'scott' dans votre base de données SQL, avec une database 'scott' et un mot de passe "oracle".
+Modavista est un site web de vente de vêtements en ligne. Il permet aux utilisateurs de consulter les articles disponibles, de les ajouter à leur panier et de les acheter. Les utilisateurs peuvent également consulter leur historique de commandes.
 
-2. Exécutez le script SQL suivant pour créer des tables dans le schéma 'scott'. Les définitions de ces tables se trouvent dans le fichier `tables.sql`:
+![image](https://github.com/Smidiboii/ModaVista/assets/115375151/5080ea32-65f8-4fc4-b7bc-557ffa9d1828)
 
-    ```sql
-    USE scott;
-    -- Exécutez le contenu de tables.sql ici
-    ```
+## Installation
 
-## Installation de Node.js et NPM
-
-Assurez-vous d'avoir Node.js et npm installés sur votre machine. Si ce n'est pas le cas, suivez les étapes ci-dessous :
-
+```bash
+npm install
 ```
-sudo apt update
-sudo apt install nodejs
-sudo apt install npm
-```
-## Configuration du Projet
-Naviguez jusqu'au répertoire de votre projet dans le terminal.
-Installez nodemon en tant que dépendance de développement avec la commande suivante :
+
+## Fichier .env
+
+Ajoutez un fichier .env à la racine du projet avec les variables d'environnement suivantes :
 
 ```
-npm install nodemon --save-dev
+BCRYPT_ROUNDS = 10
+MONGO_URI = 'mongodb://localhost:27017/db'
+JWT_SECRET_TOKEN = 'secret'
+STRIPE_SECRET_KEY = 'xxx'
 ```
-Démarrez le serveur en utilisant la commande suivante :
-```
-nodemon server.js
-```
-Assurez-vous que le serveur écoute sur le port 3000 (Vu dans le terminal).
 
-## Accéder à la Page Web
-Ouvrez un navigateur web.
-Entrez l'URL suivante dans la barre d'adresse :
+## Lancement
+
+Avant le lancement, assurez-vous que le serveur MongoDB est en cours d'exécution.
+Aussi, assurez-vous d'avoir un fichier .env avec les variables d'environnement nécessaires.
+
+```bash
+npm start
 ```
-http://localhost:3000
+
+## Seed
+
+Utiliser le script suivant pour ajouter des données à la base de données :
+
+```bash
+npm run seed
 ```
-Vous devriez maintenant avoir accès à la page web.
+
+## Tests
+
+Ceci exécute les tests unitaires et les tests d'intégration.
+
+```bash
+npm test
+```
+
+## Technologies
+
+- Node.js
+- Express.js
+- MongoDB
+- Mongoose
+- Stripe
+- JWT
+- Bcrypt
+
+## Sécurité
+
+- Bcrypt pour le hachage des mots de passe
+- JWT pour l'authentification
+- Stripe pour le paiement
