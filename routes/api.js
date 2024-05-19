@@ -76,6 +76,17 @@ api.post(
 	})
 );
 
+api.post('/complete',
+	tryCatch(async (req, res) => {
+		const { idClient } = req.body;
+		console.log(idClient)
+
+		const lol = await Client.findByIdAndUpdate(idClient, {
+			$set: { cart: [] }
+		})
+	})
+);
+
 api.post(
 	"/cart/enlever",
 	tryCatch(async (req, res) => {
@@ -85,6 +96,7 @@ api.post(
 		await Client.findByIdAndUpdate(idClient, {
 			$pull: { cart: produitId },
 		});
+		return res.status(200).send("Produit enleve");
 	})
 );
 

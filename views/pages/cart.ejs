@@ -11,15 +11,13 @@
 				if (document.getElementById(`btnConfirmer${j}`).innerHTML == ``) {
 					subTots[j] = document.getElementById(`subT${j}`).innerText;
 					console.log(document.getElementById(`subT${j}`).innerText);
-				} else {
 				}
 			}
-			console.log(subTots);
 		}
 		async function enleverProduits(i) {
 			var listeProduits = "<%= compterProduits() %>";
 			id = listeProduits.split(",")[i].split(";")[0];
-			await fetch("/api/cart/enlever", {
+			const response = await fetch("/api/cart/enlever", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -116,19 +114,19 @@
 			document.getElementById("total").innerText = total.toFixed(2) + "$";
 		}
 
-		async function sauvegargerTotal(){
+		async function sauvegargerTotal() {
 			const totalPriceStr = document.getElementById("total").innerText;
-            const products = [];
-            const totalPrice = parseFloat(totalPriceStr);
+			const products = [];
+			const totalPrice = parseFloat(totalPriceStr);
 
-            const response = await fetch('/cart', {
-                method: 'POST',
-                headers: {
-                'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ Total: totalPrice, products: products })
-            })
-            
+			const response = await fetch('/cart', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ Total: totalPrice, products: products, idClient: "<%= idClient %>", })
+			})
+
 			const data = await response.json();
 			window.location.href = data.Surl;
 		}
@@ -216,7 +214,8 @@
 											</tr>
 											<tr>
 												<th colspan="5">
-													<button id="checkout" type="submit" class="btn btn-primary" onclick="sauvegargerTotal()">
+													<button id="checkout" type="submit" class="btn btn-primary"
+														onclick="sauvegargerTotal()">
 														<div id="texteButton">Proceed to checkout</div>
 														<span>
 															<div id="spinner" class="spinner-border" role="status"

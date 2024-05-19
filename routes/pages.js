@@ -49,8 +49,7 @@ const onlyGuest = (req, res, next) => {
 pages.get(
 	"/",
 	tryCatch(async (req, res) => {
-		const produits = await Produit.find().limit(4);
-		res.render("pages/index", { ...req.sharedData, produits });
+		res.render("pages/index", { ...req.sharedData});
 	})
 );
 
@@ -116,7 +115,6 @@ pages.get(
 		for (let i = 0; i < cartContent.length; i++) {
 			produits.push(await Produit.findById(cartContent[i]));
 		}
-		console.log(idClient);
 		res.render("pages/cart", { ...req.sharedData, cartContent, produits, idClient });
 	})
 );
@@ -169,7 +167,6 @@ pages.get("/api/NousTrouver", async (req, res) => {
 	res.json(emplacements);
 });
 pages.use("*", (req, res, next) => {
-	console.log("Request URL:", req.originalUrl);
 	if (req.originalUrl.startsWith("/cart")) {
 		return next();
 	} else {
