@@ -4,7 +4,7 @@ import tryCatch from "../utils/tryCatch.js";
 
 import Produit from "../models/produit.js";
 import Commande from "../models/commande.js";
-import { MongoClient } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 import Client from "../models/client.js";
 import Collection from "../models/collection.js";
 
@@ -49,7 +49,7 @@ const onlyGuest = (req, res, next) => {
 pages.get(
 	"/",
 	tryCatch(async (req, res) => {
-		res.render("pages/index", { ...req.sharedData});
+		res.render("pages/index", { ...req.sharedData });
 	})
 );
 
@@ -75,6 +75,20 @@ pages.get(
 		});
 
 		res.render("pages/category", { ...req.sharedData, produits, gender });
+	})
+);
+
+pages.get(
+	"/account",
+	onlyAuthUser,
+	tryCatch(async (req, res) => {
+		const commandes = await Commande.find({ clientId: req.sharedData.userId });
+
+		let donneesClient = await db.collection('clients')
+			.find({ '_id': new ObjectId(req.sharedData.userId) })
+			.project({ 'prenom': 1, 'nom': 1, 'email': 1 }).toArray();
+
+		res.render("pages/account", { ...req.sharedData, commandes, clientId: req.sharedData.userId, donneesClient: donneesClient[0] });
 	})
 );
 
