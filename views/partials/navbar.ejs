@@ -7,7 +7,7 @@ _________________________________________________________
         <div class="container">
             <div class="row">
                 <div class="col-lg-6 offer mb-3 mb-lg-0">
-                    <a href="#" class="ml-1">Obtenez 35% de rabais avec le code promo MODE23 !</a>
+                    <a class="ml-1">Obtenez 35% de rabais avec le code promo MODE23 si vous dépensez plus de 60$!</a>
                 </div>
                 <div class="col-lg-6 text-center text-lg-right">
                     <ul class="menu list-inline mb-0">
@@ -29,8 +29,8 @@ _________________________________________________________
                     <div class="modal-header">
                         <h5 class="modal-title">Se connecter</h5>
                         <button type="button" data-dismiss="modal" aria-label="Close" class="close">
-							<span aria-hidden="true">×</span>
-						</button>
+                            <span aria-hidden="true">×</span>
+                        </button>
                     </div>
                     <div class="modal-body">
                         <form id="login-form" method="post">
@@ -38,7 +38,8 @@ _________________________________________________________
                                 <input id="email-modal" type="text" placeholder="email" class="form-control" />
                             </div>
                             <div class="form-group">
-                                <input id="password-modal" type="password" placeholder="password" class="form-control" />
+                                <input id="password-modal" type="password" placeholder="password"
+                                    class="form-control" />
                             </div>
                             <p class="text-center">
                                 <button class="btn btn-primary"><i class="fa fa-sign-in"></i> Log in</button>
@@ -52,71 +53,71 @@ _________________________________________________________
     </div>
     <nav class="navbar navbar-expand-lg">
         <div class="container">
-            <a href="/" class="navbar-brand home"><img src="/assets/img/modavista-logo.svg" alt="Modavista logo" class="d-inline-block w-50" /><span class="sr-only">Modavista - go to homepage</span></a>
+            <a href="/" class="navbar-brand home"><img src="/assets/img/modavista-logo.svg" alt="Modavista logo"
+                    class="d-inline-block w-50" /><span class="sr-only">Modavista - go to homepage</span></a>
             <div class="navbar-buttons">
-                <button type="button" data-toggle="collapse" data-target="#navigation" class="btn btn-outline-secondary navbar-toggler">
-					<span class="sr-only">Toggle navigation</span><i class="fa fa-align-justify"></i>
-				</button>
-                <button type="button" data-toggle="collapse" data-target="#search" class="btn btn-outline-secondary navbar-toggler">
-					<span class="sr-only">Toggle search</span><i class="fa fa-search"></i></button
-				><a href="basket.html" class="btn btn-outline-secondary navbar-toggler"
-					><i class="fa fa-shopping-cart"></i
-				></a>
-                    </div>
-                    <div id="navigation" class="collapse navbar-collapse">
-                        <ul class="navbar-nav mr-auto">
-                            <li class="nav-item"><a href="#" class="nav-link active">Home</a></li>
-                            <li class="nav-item dropdown menu-large">
-                                <a href="#" data-toggle="dropdown" data-hover="dropdown" data-delay="200" class="dropdown-toggle nav-link">Catégories<b class="caret"></b
-						></a>
-                                <ul class="dropdown-menu megamenu">
-                                    <li>
-                                        <div class="row">
-                                            <div class="col-md-6 col-lg-3">
-                                                <h5>Pour Homme</h5>
-                                                <ul class="list-unstyled mb-3">
-                                                    <% collections.forEach(collection => { %>
-                                                        <li class="nav-item">
-                                                            <a href="/category/H/<%= collection._id %>" class="nav-link">
-                                                                <%= collection.nom %>
-                                                            </a>
-                                                        </li>
-                                                        <% }); %>
-                                                </ul>
-                                            </div>
-                                            <div class="col-md-6 col-lg-3">
-                                                <h5>Pour Femme</h5>
-                                                <ul class="list-unstyled mb-3">
-                                                    <% collections.forEach(collection => { %>
-                                                        <li class="nav-item">
-                                                            <a href="/category/F/<%= collection._id %>" class="nav-link">
-                                                                <%= collection.nom %>
-                                                            </a>
-                                                        </li>
-                                                        <% }); %>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
+                <button type="button" data-toggle="collapse" data-target="#navigation"
+                    class="btn btn-outline-secondary navbar-toggler">
+                    <span class="sr-only">Toggle navigation</span><i class="fa fa-align-justify"></i>
+                </button>
+                <button type="button" data-toggle="collapse" data-target="#search"
+                    class="btn btn-outline-secondary navbar-toggler">
+                    <span class="sr-only">Toggle search</span><i class="fa fa-search"></i></button><a href="basket.html"
+                    class="btn btn-outline-secondary navbar-toggler"><i class="fa fa-shopping-cart"></i></a>
+            </div>
+            <div id="navigation" class="collapse navbar-collapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item"><a href="/" class="nav-link active">Home</a></li>
+                    <li class="nav-item dropdown menu-large">
+                        <a data-toggle="dropdown" data-hover="dropdown" data-delay="200"
+                            class="dropdown-toggle nav-link">Catégories<b class="caret"></b></a>
+                        <ul class="dropdown-menu megamenu">
+                            <li>
+                                <div class="row">
+                                    <div class="col-md-6 col-lg-3">
+                                        <h5>Pour Homme</h5>
+                                        <ul class="list-unstyled mb-3">
+                                            <% collections.forEach(collection=> { %>
+                                                <li class="nav-item">
+                                                    <a href="/category/H/<%= collection._id %>" class="nav-link">
+                                                        <%= collection.nom %>
+                                                    </a>
+                                                </li>
+                                                <% }); %>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6 col-lg-3">
+                                        <h5>Pour Femme</h5>
+                                        <ul class="list-unstyled mb-3">
+                                            <% collections.forEach(collection=> { %>
+                                                <li class="nav-item">
+                                                    <a href="/category/F/<%= collection._id %>" class="nav-link">
+                                                        <%= collection.nom %>
+                                                    </a>
+                                                </li>
+                                                <% }); %>
+                                        </ul>
+                                    </div>
+                                </div>
                             </li>
                         </ul>
-                        <div class="navbar-buttons d-flex justify-content-end">
-                            <!-- /.nav-collapse-->
-                            <div id="search-not-mobile" class="navbar-collapse collapse"></div>
+                    </li>
+                </ul>
+                <div class="navbar-buttons d-flex justify-content-end">
+                    <!-- /.nav-collapse-->
+                    <div id="search-not-mobile" class="navbar-collapse collapse"></div>
 
-                            <div id="basket-overview" class="navbar-collapse collapse d-none d-lg-block">
-                                <a href="/cart" class="btn btn-primary navbar-btn"><i class="fa fa-shopping-cart"></i
-						></a>
-                            </div>
-                        </div>
+                    <div id="basket-overview" class="navbar-collapse collapse d-none d-lg-block">
+                        <a href="/cart" class="btn btn-primary navbar-btn"><i class="fa fa-shopping-cart"></i></a>
                     </div>
                 </div>
-                </nav>
+            </div>
+        </div>
+    </nav>
 </header>
 
 <script>
-    document.getElementById("login-form").addEventListener("submit", async(e) => {
+    document.getElementById("login-form").addEventListener("submit", async (e) => {
         e.preventDefault();
 
         const email = document.getElementById("email-modal").value;

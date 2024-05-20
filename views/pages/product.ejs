@@ -82,36 +82,36 @@
                 <%- include ("../partials/javascript.ejs") %>
     </body>
     <script>
-       const addToCartButton = document.getElementById('addToCart');
+        const addToCartButton = document.getElementById('addToCart');
 
-addToCartButton.addEventListener('click', function(event) {
-    event.preventDefault();
-    const token = getCookie('token');
+        addToCartButton.addEventListener('click', function (event) {
+            event.preventDefault();
+            const token = getCookie('token');
 
-    // Vérifier si le token est disponible
-    if (token) {
-        fetch('/api/cart', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
+            // Vérifier si le token est disponible
+            if (token) {
+                fetch('/api/cart', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                    , body: JSON.stringify({
+                        'produitsID': ['<%= produit._id %>']
+                    })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert('Article ajouté au panier');
+                    })
+                    .catch(error => {
+                        console.error('Erreur lors de la requête fetch :', error);
+                        alert('Erreur lors de la requête.');
+                    });
+            } else {
+                alert('Veuillez vous connecter.');
             }
-            ,body: JSON.stringify({
-                'produitsID': ['<%= produit._id %>']
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            alert('Article ajouté au panier');
-        })
-        .catch(error => {
-            console.error('Erreur lors de la requête fetch :', error);
-            alert('Erreur lors de la requête.');
         });
-    } else {
-        alert('Veuillez vous connecter.');
-    }
-});
     </script>
 
 </html>

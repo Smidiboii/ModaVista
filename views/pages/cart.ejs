@@ -163,6 +163,7 @@
 															nom = produit.nom;
 															prix = produit.prix;
 															subtot = prix * nb;
+															if(nb>5) {nb=5; subtot=prix*5; }
 															%>
 															<tr>
 																<td>
@@ -246,11 +247,8 @@
 
 	<%function compterProduits() { nbProduits=0; idsProduits=[]; for (let i=0; i < produits.length; i++) {
 		produitDuplique=false; for (let j=0; j < idsProduits.length; j++) { if
-		(produits[i]._id==idsProduits[j].split(";")[0]) { produitDuplique=true; idsProduits[j]=produits[i]._id + ";" +
+		(produits[i]._id==idsProduits[j].split(";")[0] ) { produitDuplique=true; idsProduits[j]=produits[i]._id + ";" +
 		(parseInt(idsProduits[j].split(";")[1]) + 1); break; } } if (!produitDuplique) { nbProduits++;
-		idsProduits.push(produits[i]._id + ";1" ); } } return idsProduits; } function enleverProduit(id) {
-		console.log("id="+id);
-		}
-		%>
-		
+		idsProduits.push(produits[i]._id + ";1" ); } } return idsProduits; } %>
+
 </html>
