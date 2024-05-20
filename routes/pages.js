@@ -53,6 +53,11 @@ pages.get(
 	})
 );
 
+pages.get("/logout", (req, res) => {
+	res.clearCookie("token");
+	res.redirect("/");
+});
+
 pages.get(
 	"/register",
 	onlyGuest,

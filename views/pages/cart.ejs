@@ -44,7 +44,7 @@
 			document.getElementById(`btnConfirmer${i}`).innerHTML =
 				`<button class="btn-primary fa fa-check" onclick="modifierQuantite('${id}','${quant}','${i}')"/>`;
 			document.getElementById("nouvSubT").innerHTML =
-				`<th colspan="5">Nouveau Subtotal</th>
+				`<th colspan="5">Nouveau total</th>
 				 <th >${CalculerNouvTotal()}</th>`;
 			document.getElementById("TitreConfirmer").innerHTML =
 				`Confirmer?`;
@@ -146,10 +146,10 @@
 											<table class="table">
 												<thead>
 													<tr>
-														<th colspan="2">Product</th>
-														<th>Quantity</th>
+														<th colspan="2">Produit</th>
+														<th>Quantité</th>
 														<th id="TitreConfirmer"></th>
-														<th>Unit price</th>
+														<th>Prix par unité</th>
 														<th colspan="2">Subtotal</th>
 													</tr>
 												</thead>
@@ -217,7 +217,7 @@
 												<th colspan="5">
 													<button id="checkout" type="submit" class="btn btn-primary"
 														onclick="sauvegargerTotal()">
-														<div id="texteButton">Proceed to checkout</div>
+														<div id="texteButton">Payer</div>
 														<span>
 															<div id="spinner" class="spinner-border" role="status"
 																style="display: none;">
