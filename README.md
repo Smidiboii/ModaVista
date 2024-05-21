@@ -6,6 +6,7 @@ Modavista est un site web de vente de vêtements en ligne. Il permet aux utilisa
 ## Installation
 
 ```bash
+(Si le dossier node_modules est présent, il faut l'effacer et le reinstaller) 
 npm install
 ```
 
